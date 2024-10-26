@@ -16,7 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from sgipañol.views import navbar, iniciar_sesion, cerrar_sesion
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('navbar/', navbar, name="navbar"),
+    path('iniciar-sesion/', iniciar_sesion, name="iniciar_sesion"),
+    path('cerrar-sesion/', cerrar_sesion, name="cerrar_sesion"),
 ]

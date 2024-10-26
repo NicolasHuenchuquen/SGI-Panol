@@ -1,0 +1,62 @@
+.navbar {
+    background-color: #a80000;
+}
+
+.nav-item {
+    margin-right: 0.5rem;
+}
+
+.nav-link {
+    padding: 0.5rem 0.7rem;
+    color: #ffffff !important;
+    font-size: 0.85rem !important;
+}
+
+.nav-link:hover {
+    color: #ffbb33 !important;
+}
+
+.text-white {
+    font-size: 0.93rem;
+}
+
+.nav-link i {
+    font-size: 1.2rem;
+}
+
+.d-flex.align-items-center {
+    margin-left: 1rem;
+}
+
+.navbar-brand img {
+    height: 1.7rem;
+}
+
+.navbar-toggler {
+    border: none; 
+    background-color: transparent; 
+    padding: 0.5rem; 
+}
+
+.navbar-toggler img {
+    height: 30px; 
+    width: auto; 
+}
+
+.navbar-collapse {
+    background-color: #a80000;
+}
+
+.dropdown-menu {
+    background-color: #850000; 
+    border: none; 
+}
+
+.dropdown-item {
+    color: #ffffff;
+}
+
+.dropdown-item:hover {
+    background-color: #a80000;
+    color: #ffbb33; 
+}
