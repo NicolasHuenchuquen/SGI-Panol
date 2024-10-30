@@ -1,0 +1,50 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg">
+    <div class="container">
+        <!-- Logo -->
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="{% static 'images/logoINACAP.png' %}" alt="Logo Inacap" class="img-fluid" style="height: 1.7rem;">
+            <span class="text-white mx-2 fw-bold">|</span>
+            <span class="text-white fw-bold">La Granja</span>
+        </a>
+        <!-- Botón del menú hamburguesa -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <img class="navbar-toggler-icon" src="{% static 'images/burger-bar2.png' %}">
+        </button>
+        <!-- Elementos del menú -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">FORMULARIO DE SOLICITUD</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">CREAR USUARIO</a>
+                </li>
+                <!-- Dropdown Artículos -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="articulosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        ARTÍCULOS
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="articulosDropdown">
+                        <li><a class="dropdown-item" href="{% url 'agregar_insumo' %}">INSUMOS</a></li>
+                        <li><a class="dropdown-item" href="#">ACTIVOS</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">INVENTARIO GENERAL</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">HISTORIAL DE SOLICITUDES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">ELEMENTOS DE BAJA</a>
+                </li>
+            </ul>
+            <div class="d-flex align-items-center ms-3">
+                <span class="text-white me-2" style="font-size: 0.8rem;">{{ user.username }}</span>
+                <a href="#" class="nav-link text-white me-2"><i class="fas fa-user-plus"></i></a>
+                <a href="{% url 'cerrar_sesion' %}" class="nav-link text-white"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </div>
+    </div>
+</nav>

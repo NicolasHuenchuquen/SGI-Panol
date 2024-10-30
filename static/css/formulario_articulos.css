@@ -1,0 +1,35 @@
+h1{
+    text-align: center;
+    margin: 10px !important;
+}
+h2{
+    margin-bottom: 30px ; 
+}
+#contenedor_body{
+    align-items: center;
+    justify-content: center;
+    margin: 0px;
+}
+
+#contenedor{
+    background-color: #eee;
+    width: 550px;
+    border-radius: 13px;
+}
+
+.errores {
+    max-height: 50px;
+    overflow-y: auto;
+    color: black;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
+
+.form{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#volver{
+    margin-right: 50px;
+}
