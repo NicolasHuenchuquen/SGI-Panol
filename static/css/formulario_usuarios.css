@@ -1,0 +1,56 @@
+h1 {
+    text-align: center;
+    margin: 10px !important;
+}
+
+h2 {
+    margin-bottom: 30px; 
+}
+
+#contenedor_body {
+    display: flex; /* Cambiado a flex para facilitar la alineación */
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+}
+
+#contenedor {
+    background-color: #eee;
+    width: 100%; /* Cambiado a 100% para que ocupe el ancho completo */
+    max-width: 550px; /* Mantener un ancho máximo para no exceder en pantallas grandes */
+    border-radius: 13px;
+    padding: 20px; /* Agregado padding para espacio interior */
+}
+
+.errores {
+    max-height: 50px;
+    overflow-y: auto;
+    color: black;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
+
+.form {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+#volver {
+    margin-right: 50px;
+}
+
+/* Media Queries para Responsividad */
+@media (max-width: 768px) {
+    #contenedor {
+        padding: 10px; /* Reducir padding en pantallas pequeñas */
+    }
+
+    .form {
+        margin-left: 10px; /* Reducir márgenes en pantallas pequeñas */
+        margin-right: 10px;
+    }
+
+    #volver {
+        margin-right: 20px; /* Reducir margen derecho en el botón "volver" */
+    }
+}

@@ -9,7 +9,7 @@
 .nav-link {
     padding: 0.5rem 0.7rem;
     color: #ffffff !important;
-    font-size: 0.85rem !important;
+    font-size: 0.75rem; /* Tamaño reducido */
 }
 
 .nav-link:hover {
@@ -17,11 +17,11 @@
 }
 
 .text-white {
-    font-size: 0.93rem;
+    font-size: 0.8rem; /* Tamaño reducido */
 }
 
 .nav-link i {
-    font-size: 1.2rem;
+    font-size: 1rem; /* Tamaño reducido */
 }
 
 .d-flex.align-items-center {
@@ -29,7 +29,7 @@
 }
 
 .navbar-brand img {
-    height: 1.7rem;
+    height: 1.5rem; /* Ajustar la altura de la imagen si es necesario */
 }
 
 .navbar-toggler {

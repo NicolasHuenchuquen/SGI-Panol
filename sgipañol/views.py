@@ -12,13 +12,21 @@ def iniciar_sesion(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect('navbar')
+        
+        if not username or not password:
+            messages.error(request, 'Por favor ingrese tanto el nombre de usuario como la contraseña.')
         else:
-            messages.error(request, 'Nombre de usuario o contraseña no válidos')
+            # Autenticación del usuario
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                next_url = request.GET.get('next', 'navbar')  # Redirigir a la URL siguiente o 'navbar'
+                return redirect(next_url)
+            else:
+                messages.error(request, 'Nombre de usuario o contraseña no válidos')
+    
     return render(request, 'navegacion/iniciar_sesion.html')
+
 
 @login_required
 def cerrar_sesion(request):
