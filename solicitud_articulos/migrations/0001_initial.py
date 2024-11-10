@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 # Cambiar 'fecha_hora_devolucion' a dos campos separados
                 ('fecha_devolucion', models.DateField(default=models.functions.Now())),
                 ('hora_devolucion', models.TimeField(default=models.functions.Now())),
-                ('codigo_articulo', models.CharField(max_length=50)),
+                ('cod_articulo', models.CharField(max_length=50)),
                 ('cantidad', models.PositiveIntegerField()),
             ],
         ),

@@ -3,7 +3,7 @@ from django.utils import timezone
 
 class SolicitudArticulo(models.Model):
     nombre_apellido = models.CharField(max_length=255)
-    rut = models.CharField(max_length=12, unique=True)
+    rut = models.CharField(max_length=12)
     asignatura = models.CharField(max_length=255)
     fecha_salida = models.DateField() 
     hora_salida = models.TimeField()   
