@@ -1,7 +1,7 @@
 {% load static %}
 {% load widget_tweaks %}
 <!DOCTYPE html>
-<html lang="es">
+<html>
 
 <head>
     <meta charset="UTF-8">
@@ -16,34 +16,29 @@
         crossorigin="anonymous"></script>
     <!-- Estilos personalizados -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     <link rel="stylesheet" href="{% static 'css/formulario_usuarios.css' %}">
-    <script src="https://kit.fontawesome.com/b7c3ab0519.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     {% include 'navegacion/nav.html' %}
 
     <div class="container mt-5">
-        <h1 class="text-center">Agregar Pañolero</h1>
+        <h2 class="text-center titulo-seccion">Agregar Pañolero</h2>
         <div class="border p-4 mx-auto" id="contenedor">
-            <h2 class="text-center mb-4">Datos del Pañolero</h2>
+            <form method="POST" class="form">
+                {% csrf_token %}
 
-            <!-- Mostrar mensajes de éxito y error -->
-            {% if messages %}
-                <div class="alert alert-dismissible fade show" role="alert">
+                {% if messages %}
+                <div class="alert alert-success fade show" role="alert">
                     {% for message in messages %}
                         <p class="mb-0">{{ message }}</p>
                     {% endfor %}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-            {% endif %}
-
-            <form method="POST" class="form">
-                {% csrf_token %}
+                {% endif %}
 
                 <div class="form-group mb-3">
-                    <label for="username" class="form-label">Nombre de Usuario</label>
+                    <label for="username" class="form-label titulo-input">Nombre de Usuario</label>
                     {{ form.username|add_class:"form-control" |attr:"placeholder:Ingrese su nombre de usuario" }}
                     {% for error in form.username.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -51,7 +46,7 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="rut" class="form-label">RUT</label>
+                    <label for="rut" class="form-label titulo-input">RUT</label>
                     {{ form.rut|add_class:"form-control" |attr:"placeholder:Ingrese su RUT" }}
                     {% for error in form.rut.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -59,7 +54,7 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="email" class="form-label">Email</label>
+                    <label for="email" class="form-label titulo-input">Email</label>
                     {{ form.email|add_class:"form-control" |attr:"placeholder:Ingrese su email" }}
                     {% for error in form.email.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -67,7 +62,7 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="password" class="form-label">Contraseña</label>
+                    <label for="password" class="form-label titulo-input">Contraseña</label>
                     {{ form.password|add_class:"form-control" |attr:"placeholder:Ingrese su contraseña" }}
                     {% for error in form.password.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -75,7 +70,7 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="confirm_password" class="form-label">Confirmar Contraseña</label>
+                    <label for="confirm_password" class="form-label titulo-input">Confirmar Contraseña</label>
                     {{ form.confirm_password|add_class:"form-control" |attr:"placeholder:Confirme su contraseña" }}
                     {% for error in form.confirm_password.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -83,7 +78,7 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="first_name" class="form-label">Nombre</label>
+                    <label for="first_name" class="form-label titulo-input">Nombre</label>
                     {{ form.first_name|add_class:"form-control" |attr:"placeholder:Ingrese su nombre" }}
                     {% for error in form.first_name.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -91,7 +86,7 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label for="last_name" class="form-label">Apellido</label>
+                    <label for="last_name" class="form-label titulo-input">Apellido</label>
                     {{ form.last_name|add_class:"form-control" |attr:"placeholder:Ingrese su apellido" }}
                     {% for error in form.last_name.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -99,8 +94,8 @@
                 </div>
 
                 <div class="d-flex justify-content-center m-3">
-                    <a href="{% url 'navbar' %}" class="btn btn-dark me-2">Volver</a>
-                    <button type="submit" class="btn btn-success">Agregar Pañolero</button>
+                    <a href="{% url 'navbar' %}" class="btn btn-volver">Volver</a>
+                    <button type="submit" class="btn btn-agregar">Agregar Pañolero</button>
                 </div>
             </form>
         </div>

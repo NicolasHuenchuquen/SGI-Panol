@@ -1,10 +1,17 @@
-h1 {
+.titulo-seccion {
     text-align: center;
-    margin: 10px !important;
+    margin: 8px !important;
+    color: #a80000;
 }
 
-h2 {
-    margin-bottom: 30px; 
+.titulo-formulario {
+    margin-bottom: 30px;
+    color:white;
+}
+
+.titulo-input{
+    color:white;
+    font-size: large!important;
 }
 
 #contenedor_body {
@@ -12,14 +19,42 @@ h2 {
     align-items: center;
     justify-content: center;
     margin: 0;
+    color:white;
 }
 
+.titulo-input{
+    color:white;
+}
+
+.btn.btn-volver {
+    background-color: #ff1d1d !important; /* Utilizar !important si es necesario */
+    color: white !important;
+    margin-right: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn.btn-volver:hover {
+    background-color: #a80000 !important;
+    color: white !important;
+}
+
+.btn.btn-agregar {
+    background-color: #ff6f36 !important;
+    color: white !important;
+    transition: background-color 0.3s ease;
+}
+
+.btn.btn-agregar:hover {
+    background-color: rgb(7, 168, 7) !important;
+    color: rgb(255, 255, 255) !important;
+}
 #contenedor {
-    background-color: #eee;
+    background-color:#722828;
     width: 100%; /* Cambiado a 100% para que ocupe el ancho completo */
     max-width: 550px; /* Mantener un ancho máximo para no exceder en pantallas grandes */
     border-radius: 13px;
     padding: 20px; /* Agregado padding para espacio interior */
+    border-color: #ff6f36;
 }
 
 .errores {

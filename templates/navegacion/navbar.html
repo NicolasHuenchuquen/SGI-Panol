@@ -16,10 +16,10 @@
 
 <body>
     <nav class="navbar navbar-expand-lg">
-        <div class="container">
+        <div class="container-fluid">
             <!-- Logo -->
             <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="{% static 'images/logoINACAP.png' %}" alt="Logo Inacap" class="img-fluid" style="height: 1.7rem;">
+                <img src="{% static 'images/logoINACAP.png' %}" alt="Logo Inacap" class="img-fluid" style="height: 1.9rem;">
                 <span class="text-white mx-2 fw-bold">|</span>
                 <span class="text-white fw-bold">SGI</span>
             </a>
@@ -31,7 +31,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">FORMULARIO DE SOLICITUD</a>
+                        <a class="nav-link" href="{% url 'formulario_solicitudes' %}">FORMULARIO DE SOLICITUD</a>
                     </li>
                     <!-- Mostrar "CREAR USUARIO" solo si el usuario es superusuario -->
                     {% if user.is_superuser %}

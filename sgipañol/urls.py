@@ -21,8 +21,9 @@ from sgipañol.views import navbar, iniciar_sesion, cerrar_sesion
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('navbar/', navbar, name="navbar"),
-    path('iniciar-sesion/', iniciar_sesion, name="iniciar_sesion"),
+    path('', iniciar_sesion, name="iniciar_sesion"),
     path('cerrar-sesion/', cerrar_sesion, name="cerrar_sesion"),
     path('gestor-inventario/', include('gestor_inventario.urls')),
-    path('usuarios/', include('usuarios.urls'))
+    path('usuarios/', include('usuarios.urls')),
+    path('solicitudes/', include('solicitud_articulos.urls')),
 ]

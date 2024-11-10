@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'gestor_inventario',
     'usuarios',
     'widget_tweaks',
+    'solicitud_articulos',
 ]
 
 MIDDLEWARE = [
