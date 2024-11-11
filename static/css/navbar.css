@@ -3,13 +3,13 @@
 }
 
 .nav-item {
-    margin-right: 0.5rem;
+    margin-right: 0.8rem;
 }
 
 .nav-link {
     padding: 0.5rem 0.7rem;
     color: #ffffff !important;
-    font-size: 0.75rem; /* Tamaño reducido */
+    font-size: 0.9rem; /* Tamaño reducido */
 }
 
 .nav-link:hover {
@@ -35,7 +35,8 @@
 .navbar-toggler {
     border: none; 
     background-color: transparent; 
-    padding: 0.5rem; 
+    padding: 0.5rem;
+    font-size: 0.75rem; 
 }
 
 .navbar-toggler img {
@@ -54,6 +55,7 @@
 
 .dropdown-item {
     color: #ffffff;
+    font-size: 0.8rem;
 }
 
 .dropdown-item:hover {

@@ -15,7 +15,7 @@ def registrar_panolero(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Pañolero agregado exitosamente.")
-            return redirect('navbar')  # Redirige a la página deseada después de guardar
+            return redirect('registrar_panolero')  # Redirige a la página deseada después de guardar
         else:
             # Si hay errores, se muestran todos al renderizar de nuevo el formulario
             messages.error(request, "Por favor corrige los errores en el formulario.")
