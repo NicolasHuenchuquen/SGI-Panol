@@ -1,0 +1,12 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+/* TITULO DE "GESTOR DE INVENTARIO" */
+h1{
+    text-align: center;
+    margin-top: 25px !important;
+}

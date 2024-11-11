@@ -46,11 +46,11 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="articulosDropdown">
                             <li><a class="dropdown-item" href="{% url 'agregar_insumo' %}">INSUMOS</a></li>
-                            <li><a class="dropdown-item" href="#">ACTIVOS</a></li>
+                            <li><a class="dropdown-item" href="{% url 'agregar_activo' %}">ACTIVOS</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">INVENTARIO GENERAL</a>
+                        <a class="nav-link" href="{% url 'tabla_articulos' %}">INVENTARIO GENERAL</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">HISTORIAL DE SOLICITUDES</a>
