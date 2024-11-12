@@ -2,6 +2,11 @@ from django.db import models
 from django.utils import timezone
 
 class SolicitudArticulo(models.Model):
+    TIPO_SOLICITANTE_CHOICES = [
+        ('docente', 'Docente'),
+        ('otro', 'Otro'),
+    ]
+
     nombre_apellido = models.CharField(max_length=255)
     rut = models.CharField(max_length=12)
     asignatura = models.CharField(max_length=255)
@@ -11,6 +16,7 @@ class SolicitudArticulo(models.Model):
     hora_devolucion = models.TimeField()   
     cod_articulo = models.CharField(max_length=50)
     cantidad = models.PositiveIntegerField()
+    tipo_solicitante = models.CharField(max_length=10, choices=TIPO_SOLICITANTE_CHOICES, default='otro',)
 
     def __str__(self):
         return f"{self.nombre_apellido} - RUT: {self.rut} - Asignatura: {self.asignatura}"
