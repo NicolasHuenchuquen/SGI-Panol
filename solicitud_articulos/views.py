@@ -34,3 +34,7 @@ def crear_solicitud(request):
         form = SolicitudArticuloForm()
 
     return render(request, 'solicitudes/formulario_solicitudes.html', {'form': form})
+
+def historial_solicitudes(request):
+    solicitudes = SolicitudArticulo.objects.all()
+    return render(request, 'solicitudes/historial_solicitudes.html', {'solicitudes': solicitudes})

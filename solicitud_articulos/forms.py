@@ -5,7 +5,7 @@ from django.forms import DateInput, TimeInput
 class SolicitudArticuloForm(forms.ModelForm):
     class Meta:
         model = SolicitudArticulo
-        fields = ['rut', 'nombre_apellido', 'asignatura', 'fecha_salida', 'hora_salida', 'fecha_devolucion', 'hora_devolucion', 'cod_articulo', 'cantidad']
+        fields = ['rut', 'nombre_apellido', 'asignatura', 'fecha_salida', 'hora_salida', 'fecha_devolucion', 'hora_devolucion', 'cod_articulo', 'cantidad', 'tipo_solicitante']
         widgets = {
             'fecha_salida': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'hora_salida': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
