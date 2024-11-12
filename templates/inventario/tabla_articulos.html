@@ -74,7 +74,13 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
                                         <input type="hidden" name="tipo_articulo" value="{{ articulos.tipo_articulo }}">
-                                        <button type="submit" class="btn btn-warning">
+                                        <input type="hidden" name="nombre" value="{{ articulos.nombre }}">
+                                        <input type="hidden" name="cantidad" value="{{ articulos.cantidad }}">
+                                        <input type="hidden" name="ubicacion" value="{{ articulos.ubicacion }}">
+                                        <input type="hidden" name="observacion" value="{{ articulos.observacion }}">
+                                        
+                                        
+                                        <button type="submit" class="btn btn-warning" style="margin-right: 10px;">
                                             <i class="fa-solid fa-pencil" style="color: #ffffff;"></i>
                                         </button>
                                     </form>

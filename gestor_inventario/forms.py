@@ -108,3 +108,53 @@ class FormArticuloActivo(forms.ModelForm):
     class Meta:
         model = Articulo
         fields = '__all__'
+
+class FormArticuloEditar(forms.ModelForm):
+    
+    cod_articulo = forms.CharField(
+        validators=[validators.MinLengthValidator(4), validators.MaxLengthValidator(8),validar_cod_articulo],
+        widget=forms.TextInput(attrs={'class': 'form-control', 'style':'margin-top: 13px','readonly': 'readonly'}),
+    )
+
+    nombre = forms.CharField(
+        validators=[validators.MinLengthValidator(3), validators.MaxLengthValidator(100)],
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+        
+    cantidad = forms.IntegerField(
+        min_value=1, 
+        widget=forms.NumberInput(attrs={'class': 'form-control', }),
+        error_messages={
+            'min_value': 'La cantidad debe ser un número positivo.'
+        }
+    )
+
+    grupo = forms.ChoiceField(
+        choices=[('CFTN', 'CFTN'), ('IPN', 'IPN')],
+        widget=forms.Select(attrs={'class': 'form-select'})
+    )
+
+    tipo_articulo = forms.CharField(
+    initial='Activo',  
+    widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'style':'margin-top: 13px',
+        'readonly': 'readonly', 
+    })
+    )
+
+
+    ubicacion = forms.CharField(
+        validators=[validators.MinLengthValidator(2), validators.MaxLengthValidator(8)],
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    observacion = forms.CharField(
+        required=False,
+        validators=[validators.MinLengthValidator(0)],
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
+    )
+    
+    class Meta:
+        model = Articulo
+        fields = '__all__'
