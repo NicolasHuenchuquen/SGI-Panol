@@ -6,7 +6,7 @@ from django.contrib import messages
 
 @login_required
 def navbar(request):
-    return render(request, 'navegacion/navbar.html')
+    return render(request, 'navegacion/nav.html')
 
 def iniciar_sesion(request):
     if request.method == 'POST':
