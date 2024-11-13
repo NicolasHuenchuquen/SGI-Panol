@@ -4,6 +4,7 @@ from sgipañol.views import navbar
 from .models import Articulo
 from django.http import HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 # Create your views here.
 
 @login_required
@@ -30,36 +31,42 @@ def agregar_activo(request):
     if request.method == 'POST':
         form = FormArticuloActivo(request.POST)
         if form.is_valid():
-            print("Formulario válido")  # Verifica si está pasando por aquí
+            
             form.save()
             return redirect('tabla_articulos')
         else:
-            print("Formulario no válido", form.errors)  # Imprime los errores del formulario
+            print("Formulario no válido", form.errors)  # Mostrara los errores del formulario
     return render(request, 'inventario/agregar_activo.html', {'form': form})
 
 
 @login_required
 def editar_articulo(request):
+    # Obtiene el código del artículo del form del boton editar
+    cod_articulo = request.POST.get('cod_articulo') or request.GET.get('cod_articulo')
+    
+    if not cod_articulo:
+        messages.error(request, 'No se proporcionó código de artículo')
+        return redirect('tabla_articulos')
+    
+    # Obtiene el artículo que coincida con el codigo del objeto a editar con uno de la base de datos
+    articulo = get_object_or_404(Articulo, cod_articulo=cod_articulo)
+    
     if request.method == 'POST':
-        cod_articulo_tabla = request.POST.get('cod_articulo')
-        articulo = get_object_or_404(Articulo, cod_articulo=cod_articulo_tabla)
-        
-        # Carga el formulario con los datos enviados para editar el artículo
         form = FormArticuloEditar(request.POST, instance=articulo)
         if form.is_valid():
             form.save()
-            return redirect('tabla_articulos')  # Redirige a la vista de la tabla de artículos
-
+            messages.success(request, 'Artículo actualizado correctamente')
+            return redirect('tabla_articulos')
     else:
-        # Si es una solicitud GET, carga el formulario con la instancia del artículo
-        cod_articulo_tabla = request.GET.get('cod_articulo')
-        articulo = get_object_or_404(Articulo, cod_articulo=cod_articulo_tabla)
+        # Para peticiones GET, inicializar el formulario con la instancia del artículo
         form = FormArticuloEditar(instance=articulo)
-
-    # Pasa el formulario a la plantilla para su renderizado
-    data = {'form': form}
+    
+    data = {
+        'form': form,
+        'articulo': articulo,
+    }
+    
     return render(request, 'inventario/editar_articulo.html', data)
-
 
 
 @login_required

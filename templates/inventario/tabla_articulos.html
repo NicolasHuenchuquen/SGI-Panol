@@ -70,16 +70,10 @@
                             <td>{{ articulos.observacion }}</td>
                             <td>
                                 <div id="botones_acciones" class="container d-flex justify-content-center p-0">
-                                    <form method="POST" action="{% url 'editar_articulo' %}">
+                                    <!-- Reemplaza el form actual por este -->
+                                    <form method="GET" action="{% url 'editar_articulo' %}">
                                         {% csrf_token %}
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
-                                        <input type="hidden" name="tipo_articulo" value="{{ articulos.tipo_articulo }}">
-                                        <input type="hidden" name="nombre" value="{{ articulos.nombre }}">
-                                        <input type="hidden" name="cantidad" value="{{ articulos.cantidad }}">
-                                        <input type="hidden" name="ubicacion" value="{{ articulos.ubicacion }}">
-                                        <input type="hidden" name="observacion" value="{{ articulos.observacion }}">
-                                        
-                                        
                                         <button type="submit" class="btn btn-warning" style="margin-right: 10px;">
                                             <i class="fa-solid fa-pencil" style="color: #ffffff;"></i>
                                         </button>
@@ -116,33 +110,92 @@
                     },
                     buttons: [
                         {
-                            extend: 'print', // Copiar
-                            text: '<i class="fa-solid fa-print"></i> Impirimir', // Ícono de copiar
-                            className: 'btn btn-primary' // Estilo de Bootstrap
+                            extend: 'print', // Imprimir
+                            text: '<i class="fa-solid fa-print"></i> Imprimir', // Ícono de impresión
+                            className: 'btn btn-primary', // Estilo de Bootstrap
+                            exportOptions: {
+                                columns: ':visible:not(:last-child)' // Excluir la última columna (Acciones)
+                            },
+                            customize: function (win) {
+                                // Estilos CSS específicos para la impresión
+                                $(win.document.body).css('font-size', '10pt');
+
+                                // Centra todas las celdas en cada fila
+                                $(win.document.body).find('table').addClass('table-bordered').css('width', '100%');
+                                $(win.document.body).find('table th, table td').css('text-align', 'center');
+
+                                // Aplica estilo específico para la columna de Observación
+                                $(win.document.body).find('table tbody tr').each(function (i, row) {
+                                    // Selecciona la columna de "Observación" (índice 6 en el ejemplo)
+                                    let cell = $(row).find('td').eq(6);
+                                    cell.css({
+                                        'background-color': '#f3f3f3', // Color de fondo
+                                        'font-size': '10pt', // Tamaño de fuente
+                                        'white-space': 'normal', // Permite ajuste de línea
+                                        'word-break': 'break-word', // Divide palabras largas
+                                        
+                                    });
+                                });
+                            }
                         },
                         {
                             extend: 'excelHtml5', // Exportar a Excel
                             text: '<i class="fas fa-file-excel"></i> Excel', // Ícono de Excel
-                            className: 'btn btn-success' // Estilo de Bootstrap
+                            className: 'btn btn-success', // Estilo de Bootstrap
+                            exportOptions: {
+                                columns: ':visible:not(:last-child)' // Excluir la última columna (Acciones)
+                            }
                         },
                         {
                             extend: 'pdfHtml5', // Exportar a PDF
                             text: '<i class="fas fa-file-pdf"></i> PDF', // Ícono de PDF
-                            className: 'btn btn-danger' // Estilo de Bootstrap
+                            className: 'btn btn-danger', // Estilo de Bootstrap
+                            orientation: 'landscape', // Cambia la orientación a horizontal
+                            exportOptions: {
+                                columns: ':visible:not(:last-child)' // Excluir la última columna (Acciones)
+                            },
+                            customize: function (doc) {
+                                // Configura los anchos de columna en porcentaje
+                                doc.content[1].table.widths = ['10%', '15%', '10%', '10%', '7%', '10%', '40%']; // Ajusta según sea necesario
+
+                                // Itera sobre cada fila y columna para centrar el contenido
+                                doc.content[1].table.body.forEach(function (row, i) {
+                                    // Aplica a cada celda en la fila, incluyendo encabezados
+                                    row.forEach(function (cell) {
+                                        cell.alignment = 'center'; // Centra el texto en todas las celdas
+                                    });
+
+                                    // Estilos específicos para la columna de Observación (índice 6)
+                                    if (i !== 0) { // Ignora la primera fila (encabezados)
+                                        row[6].fillColor = '#f3f3f3'; // Color de fondo para Observación
+                                        row[6].fontSize = 10; // Ajusta el tamaño de la fuente para Observación
+                                        row[6].noWrap = false; // Permite ajuste de línea
+                                    }
+                                });
+                            }
+                        },
+                        {
+                            text: '<i class="fas fa-plus-circle"></i> Crear Insumo', // Ícono para el botón de "Crear Insumo"
+                            className: 'btn btn-success btn-sm',
+                            action: function () {
+                                window.location.href = '/gestor-inventario/agregar_insumo/'; // Redirigir al formulario de Crear Insumo
+                            }
+                        },
+                        {
+                            text: '<i class="fas fa-plus-circle"></i> Crear Activo', // Ícono para el botón de "Crear Activo"
+                            className: 'btn btn-success btn-sm',
+                            action: function () {
+                                window.location.href = '/gestor-inventario/agregar_activo'; // Redirigir al formulario de Crear Activo
+                            }
                         }
                     ],
-
-
                     layout: {
-                        top1Start: 'buttons',
-                        topStart: 'pageLength'
+                        topStart: 'buttons',
+                        top1Start: 'pageLength'
                     }
-
-
                 });
-
-
             });
+
 
 
         </script>

@@ -43,15 +43,17 @@
                             {{ form.cod_articulo.errors }}
                         </div>
                     </div>
-
+                    
                     <div class="form-group row mb-3">
-                        <label for="grupo" class="col-sm-2 col-form-label ">Grupo</label>
+                        <label for="grupo" class="col-sm-2 col-form-label">Grupo</label>
                         <div class="col-sm-10 ps-4">
                             {{ form.grupo }}
                         </div>
-                        
+                        <div class="text errores">
+                            {{ form.grupo.errors }}
+                        </div>
                     </div>
-
+                    
                     <div class="form-group row mb-3">
                         <label for="tipo_articulo" class="col-sm-2 col-form-label ">Tipo de Artículo</label>
                         <div class="col-sm-10 ps-4">
