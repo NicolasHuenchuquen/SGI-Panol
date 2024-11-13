@@ -14,6 +14,18 @@ def tabla_articulos(request):
     return render(request, 'inventario/tabla_articulos.html', data)
 
 @login_required
+def tabla_insumos(request):
+    articulos = Articulo.objects.filter(tipo_articulo="Insumo")
+    data = {'articulos': articulos}
+    return render(request, 'inventario/tabla_insumos.html', data)
+
+@login_required
+def tabla_activos(request):
+    articulos = Articulo.objects.filter(tipo_articulo="Activo")
+    data = {'articulos': articulos}
+    return render(request, 'inventario/tabla_activos.html', data)
+
+@login_required
 def agregar_insumo(request):
     form = FormArticuloInsumo()
     if request.method == 'POST':
@@ -43,7 +55,9 @@ def agregar_activo(request):
 def editar_articulo(request):
     # Obtiene el código del artículo del form del boton editar
     cod_articulo = request.POST.get('cod_articulo') or request.GET.get('cod_articulo')
-    
+    # Obtiene el valor de la tabla de origen desde donde se esta editando
+    tabla_origen = request.GET.get('tabla_origen')
+
     if not cod_articulo:
         messages.error(request, 'No se proporcionó código de artículo')
         return redirect('tabla_articulos')
@@ -56,7 +70,14 @@ def editar_articulo(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Artículo actualizado correctamente')
-            return redirect('tabla_articulos')
+            
+            # Redirige según el origen
+            if tabla_origen == 'tabla_insumos':
+                return redirect('tabla_insumos')
+            elif tabla_origen == 'tabla_activos':
+                return redirect('tabla_activos')
+            else:
+                return redirect('tabla_articulos')
     else:
         # Para peticiones GET, inicializar el formulario con la instancia del artículo
         form = FormArticuloEditar(instance=articulo)
@@ -64,6 +85,7 @@ def editar_articulo(request):
     data = {
         'form': form,
         'articulo': articulo,
+        'tabla_origen': tabla_origen,
     }
     
     return render(request, 'inventario/editar_articulo.html', data)
