@@ -71,7 +71,7 @@
                                 <td>
                                     <div id="botones_acciones" class="container d-flex justify-content-center p-0">
                                         <!-- Reemplaza el form actual por este -->
-                                        <form method="GET" action="{% url 'editar_articulo' %}">
+                                        <form method="POST" action="{% url 'editar_articulo' %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
                                             <input type="hidden" name="tabla_origen" value="tabla_insumos">
@@ -81,9 +81,10 @@
                                         </form>
 
 
-                                        <form method="POST" action="{% url 'eliminarArticulo' %}">
+                                        <form method="POST" action="{% url 'baja_articulo' %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
+                                            <input type="hidden" name="tabla_origen" value="tabla_insumos">
                                             <button type="submit" class="btn btn-danger">
                                                 <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
                                             </button>

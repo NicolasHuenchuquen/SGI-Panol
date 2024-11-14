@@ -70,8 +70,8 @@
                             <td>{{ articulos.observacion }}</td>
                             <td>
                                 <div id="botones_acciones" class="container d-flex justify-content-center p-0">
-                                    <!-- Reemplaza el form actual por este -->
-                                    <form method="GET" action="{% url 'editar_articulo' %}">
+
+                                    <form method="POST" action="{% url 'editar_articulo' %}">
                                         {% csrf_token %}
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
                                         <input type="hidden" name="tabla_origen" value="tabla_activos">
@@ -81,9 +81,10 @@
                                     </form>
 
 
-                                    <form method="POST" action="{% url 'eliminarArticulo' %}">
+                                    <form method="POST" action="{% url 'baja_articulo' %}">
                                         {% csrf_token %}
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
+                                        <input type="hidden" name="tabla_origen" value="tabla_activos">
                                         <button type="submit" class="btn btn-danger">
                                             <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
                                         </button>
@@ -134,7 +135,7 @@
                                         'font-size': '10pt', // Tamaño de fuente
                                         'white-space': 'normal', // Permite ajuste de línea
                                         'word-break': 'break-word', // Divide palabras largas
-                                        
+
                                     });
                                 });
                             }
