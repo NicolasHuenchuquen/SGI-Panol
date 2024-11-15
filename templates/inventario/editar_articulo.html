@@ -110,7 +110,8 @@
 
                     <div class="d-flex justify-content-center m-3">
                         <a href="{% url 'tabla_articulos' %}" class="btn btn-dark" id="volver">Volver</a>
-
+                        
+                        <input type="hidden" name="tabla_origen" value="{{ tabla_origen }}">
                         <button type="submit" class="btn btn-success">Guardar
                         </button>
                     </div>
