@@ -8,58 +8,145 @@
     <!-- BOOTSTRAP CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+YI7Yh6IYG+b4YEu5tK9KKbQyS4h4" crossorigin="anonymous">
     <!-- CSS personalizado -->
-    <link rel="stylesheet" href="{% static 'css/listar_solicitudes.css' %}">
+    <link rel="stylesheet" href="{% static 'css/historial_solicitudes.css' %}">
 </head>
 <body>
 
     {% include 'navegacion/nav.html' %}
 
     <div class="container mt-5">
-        <h2 class="titulo-seccion text-center">Historial de solicitudes</h2>
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Tipo de Solicitante</th>
-                        <th>Nombre y Apellido</th>
-                        <th>RUT</th>
-                        <th>Asignatura</th>
-                        <th>Fecha de Salida</th>
-                        <th>Hora de Salida</th>
-                        <th>Fecha de Devolución</th>
-                        <th>Hora de Devolución</th>
-                        <th>Código del Artículo</th>
-                        <th>Cantidad</th>
-                        <th>Estado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for solicitud in solicitudes %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{ solicitud.tipo_solicitante }}</td>
-                            <td>{{ solicitud.nombre_apellido }}</td>
-                            <td>{{ solicitud.rut }}</td>
-                            <td>{{ solicitud.asignatura }}</td>
-                            <td>{{ solicitud.fecha_salida }}</td>
-                            <td>{{ solicitud.hora_salida }}</td>
-                            <td>{{ solicitud.fecha_devolucion }}</td>
-                            <td>{{ solicitud.hora_devolucion }}</td>
-                            <td>{{ solicitud.cod_articulo }}</td>
-                            <td>{{ solicitud.cantidad }}</td>
-                            <td>{{ solicitud.estado_devolucion }}</td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="12" class="text-center">No hay solicitudes registradas.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <h2 class="titulo-seccion text-center titulo-seccion">Historial de Solicitudes</h2>
+        <div class="row">
+            {% for item in solicitudes_con_nombre %}
+                <div class="col-md-4 mb-4">
+                    <div class="card tarjeta">
+                        <div class="card-body tarjeta">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <h5 class="card-title titulo-tarjeta texto-blanco"><strong>{{ item.solicitud.nombre_apellido }}</strong></h5>
+                                    <p class="texto-blanco"><strong>RUT:</strong> <span class="rut">{{ item.solicitud.rut }}</span></p>
+                                </thead>
+
+                                <thead>
+                                    <tr>
+                                        <th class="texto-blanco">Detalle</th>
+                                        <th class="texto-blanco">Información</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="texto-blanco"><strong>Fecha y hora de salida</strong></td>
+                                        <td class="texto-blanco">{{ item.solicitud.fecha_salida }} - {{ item.solicitud.hora_salida }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="texto-blanco"><strong>Fecha y hora de devolución</strong></td>
+                                        <td class="texto-blanco">{{ item.solicitud.fecha_devolucion }} - {{ item.solicitud.hora_devolucion }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="texto-blanco"><strong>Asignatura a utilizar</strong></td>
+                                        <td class="texto-blanco">{{ item.solicitud.asignatura }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="texto-blanco"><strong>Código artículo</strong></td>
+                                        <td class="texto-blanco">{{ item.solicitud.cod_articulo }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="texto-blanco"><strong>Nombre artículo</strong></td>
+                                        <td class="texto-blanco">{{ item.nombre_articulo }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="texto-blanco"><strong>Cantidad</strong></td>
+                                        <td class="texto-blanco">{{ item.solicitud.cantidad }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Estado de devolución</strong></td>
+                                        <td style="text-align:center" class="{% if item.solicitud.estado_devolucion == 'no devuelto' %}bg-no-devuelto{% elif item.solicitud.estado_devolucion == 'parcialmente devuelto' %}bg-parcialmente-devuelto{% elif item.solicitud.estado_devolucion == 'devuelto' %}bg-devuelto{% endif %}">
+                                            {{ item.solicitud.estado_devolucion }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div class="d-flex justify-content-center mt-3">
+                                <button type="button" class="btn cambiar-estado" data-bs-toggle="modal" data-bs-target="#modalCambiarEstado{{ item.solicitud.id }}">
+                                    Cambiar Estado
+                                </button>
+                            </div>
+                           
+                            <!-- Modal para actualizar el estado de cada solicitud -->
+                            <div class="modal fade" id="modalCambiarEstado{{ item.solicitud.id }}" tabindex="-1" aria-labelledby="modalCambiarEstadoLabel{{ item.solicitud.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalCambiarEstadoLabel{{ item.solicitud.id }}">Actualizar Estado de Devolución</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form method="POST" action="{% url 'actualizar_estado_devolucion' item.solicitud.id %}">
+                                                {% csrf_token %}
+                                                <div class="mb-3">
+                                                    <label for="estado_devolucion_{{ item.solicitud.id }}" class="form-label">Selecciona el nuevo estado</label>
+                                                    <select class="form-select" name="estado_devolucion" id="estado_devolucion_{{ item.solicitud.id }}" required>
+                                                        {% if item.solicitud.estado_devolucion == 'parcialmente devuelto' %}
+                                                            <!-- Si está parcialmente devuelto, permitir solo cambiar a devuelto -->
+                                                            <option value="devuelto">Devuelto</option>
+                                                        {% elif item.solicitud.estado_devolucion == 'no devuelto' %}
+                                                            <!-- Si no está devuelto, permitir cambiar a parcialmente devuelto o devuelto -->
+                                                            <option value="devuelto">Devuelto</option>
+                                                            <option value="parcialmente devuelto">Parcialmente devuelto</option>
+                                                        {% else %}
+                                                            <!-- Si ya está devuelto, no mostrar ninguna opción -->
+                                                            <option value="devuelto" selected>Devuelto</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary" {% if item.solicitud.estado_devolucion == 'devuelto' %}disabled{% endif %}>Actualizar</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center">
+                    <p>No hay solicitudes registradas.</p>
+                </div>
+            {% endfor %}
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Función para formatear el RUT
+            function formatearRut(rut) {
+                // Eliminar puntos y guiones previos
+                rut = rut.replace(/\./g, '').replace('-', '');
+                
+                // Asegurarse de que el RUT tiene la longitud correcta
+                if (rut.length < 8 || rut.length > 9) return rut;
+    
+                // Obtener el cuerpo del RUT y el dígito verificador
+                let cuerpo = rut.slice(0, -1);
+                let dv = rut.slice(-1);
+    
+                // Formatear el cuerpo del RUT con puntos
+                cuerpo = cuerpo.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+    
+                // Devolver el RUT formateado
+                return `${cuerpo}-${dv}`;
+            }
+    
+            // Aplicar el formato a todos los RUTs mostrados
+            const rutElements = document.querySelectorAll('.rut');
+            rutElements.forEach(function(element) {
+                element.textContent = formatearRut(element.textContent);
+            });
+        });
+    </script>
+
     <!-- BOOTSTRAP JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12XpAyjCpIt2RO1IN80CEqMK2mYlJrNJA7PAT1o+R/9g6PSV" crossorigin="anonymous"></script>
 </body>
 </html>

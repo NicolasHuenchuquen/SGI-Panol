@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from .forms import SolicitudArticuloForm
 from .models import SolicitudArticulo
@@ -37,4 +37,29 @@ def crear_solicitud(request):
 
 def historial_solicitudes(request):
     solicitudes = SolicitudArticulo.objects.all()
-    return render(request, 'solicitudes/historial_solicitudes.html', {'solicitudes': solicitudes})
+    solicitudes_con_nombre = []
+    
+    for solicitud in solicitudes:
+        articulo = Articulo.objects.get(cod_articulo=solicitud.cod_articulo)
+        solicitudes_con_nombre.append({
+            'solicitud': solicitud,
+            'nombre_articulo': articulo.nombre  
+        })
+    
+    return render(request, 'solicitudes/historial_solicitudes.html', {'solicitudes_con_nombre': solicitudes_con_nombre})
+
+def actualizar_estado_devolucion(request, solicitud_id):
+    solicitud = get_object_or_404(SolicitudArticulo, id=solicitud_id)
+    
+    if request.method == 'POST':
+        nuevo_estado = request.POST.get('estado_devolucion')
+        
+
+        if nuevo_estado:
+            solicitud.estado_devolucion = nuevo_estado
+            solicitud.save()
+            messages.success(request, 'Estado de devolución actualizado exitosamente.')
+        else:
+            messages.error(request, 'Error al actualizar el estado de devolución.')
+
+    return redirect('historial_solicitudes')

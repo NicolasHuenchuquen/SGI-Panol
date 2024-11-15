@@ -1,0 +1,67 @@
+.tarjeta{
+    background-color: #722828;
+    border-radius: 4px;
+}
+
+h5{
+    color:white !important;
+}
+
+.titulo-seccion{
+    color: #a80000;
+}
+
+.estado-devolucion {
+    display: flex;
+    gap: 10px;
+}
+
+.bg-no-devuelto {
+    background-color: #ff0019 !important; 
+    color: #ffffff!important;  
+}
+
+.bg-parcialmente-devuelto {
+    background-color: #ab7106 !important;
+    color: #ffffff!important;
+}
+
+.bg-devuelto {
+    background-color: #008f13 !important;
+    color: #ffffff!important;
+}
+
+.table.table {
+    border-color: #722828;
+}
+
+.table.table th,
+.table.table td {
+    border-color: #722828;
+    background-color: #a53e3e;
+    color:white;
+}
+
+/* También puedes añadir un fondo transparente para asegurarte de que no se noten las celdas */
+.table.table {
+    border-color: #722828;
+}
+
+.texto-blanco {
+    color: white;
+}
+
+.rojo-intenso {
+    background-color: #D91424; /* Un rojo más intenso */
+}
+
+.cambiar-estado {
+    background-color: #ff6f36 !important;
+    color: white !important;
+    transition: background-color 0.3s ease;
+}
+
+.cambiar-estado:hover {
+    background-color: rgb(7, 168, 7) !important;
+    color: rgb(255, 255, 255) !important;
+}

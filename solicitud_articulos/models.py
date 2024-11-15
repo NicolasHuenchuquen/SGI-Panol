@@ -9,6 +9,7 @@ class SolicitudArticulo(models.Model):
 
     ESTADO_DEVOLUCION_CHOICES = [
         ('devuelto', 'Devuelto'),
+        ('parcialmente devuelto', 'Parcialmente devuelto'),
         ('no devuelto', 'No devuelto'),
     ]
 
@@ -22,7 +23,7 @@ class SolicitudArticulo(models.Model):
     cod_articulo = models.CharField(max_length=50)
     cantidad = models.PositiveIntegerField()
     tipo_solicitante = models.CharField(max_length=10, choices=TIPO_SOLICITANTE_CHOICES, default='otro',)
-    estado_devolucion = models.CharField(max_length=20, choices=ESTADO_DEVOLUCION_CHOICES, default='no devuelto',)
+    estado_devolucion = models.CharField(max_length=50, choices=ESTADO_DEVOLUCION_CHOICES, default='no devuelto',)
 
     def __str__(self):
         return f"{self.nombre_apellido} - RUT: {self.rut} - Asignatura: {self.asignatura}"
