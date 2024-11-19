@@ -25,6 +25,8 @@ def tabla_activos(request):
     data = {'articulos': articulos}
     return render(request, 'inventario/tabla_activos.html', data)
 
+
+
 @login_required
 def agregar_insumo(request):
     form = FormArticuloInsumo()
@@ -32,9 +34,9 @@ def agregar_insumo(request):
         form = FormArticuloInsumo(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('tabla_articulos')
-        data = {'form' : form}
-    data = {'form' : form}
+            messages.success(request, 'El Insumo ha sido ingresado correctamente.', extra_tags='agregar_insumo')
+            return redirect('agregar_insumo')  # Redirige a la misma página para que el mensaje se muestre
+    data = {'form': form}
     return render(request, 'inventario/agregar_insumo.html', data)
 
 @login_required
@@ -45,7 +47,8 @@ def agregar_activo(request):
         if form.is_valid():
             
             form.save()
-            return redirect('tabla_articulos')
+            messages.success(request, 'El Activo ha sido ingresado correctamente.', extra_tags='agregar_activo')
+            return redirect('agregar_activo')
         else:
             print("Formulario no válido", form.errors)  # Mostrara los errores del formulario
     return render(request, 'inventario/agregar_activo.html', {'form': form})
@@ -69,14 +72,28 @@ def editar_articulo(request):
             form = FormArticuloEditar(request.POST, instance=articulo)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Artículo actualizado correctamente')
+                messages.success(request, 'Artículo guardado correctamente.', extra_tags='articulo_editado')
                 
                 # Redirige según origen
                 if tabla_origen == 'tabla_insumos':
                     return redirect('tabla_insumos')
+                
                 elif tabla_origen == 'tabla_activos':
                     return redirect('tabla_activos')
-                return redirect('tabla_articulos')
+                
+                elif tabla_origen == 'tabla_general':
+                    return redirect('tabla_articulos')
+                
+                elif tabla_origen == 'tabla_bajas':
+                    return redirect('tabla_bajas')
+                
+                elif tabla_origen == 'Insumo_baja':
+                    return redirect('tabla_bajas_tipo', tipo='Insumo_baja')
+                
+                elif tabla_origen == 'Activo_baja':
+                    return redirect('tabla_bajas_tipo', tipo='Activo_baja')
+                
+                return redirect('tabla_bajas')
         else:
             # Si solo viene el código, muestra el formulario
             form = FormArticuloEditar(instance=articulo)
@@ -94,15 +111,6 @@ def editar_articulo(request):
 
 
 @login_required
-def eliminar_articulo(request):
-    if request.method == 'POST':
-        cod_articulo_form = request.POST.get('cod_articulo')
-        articulo = get_object_or_404(Articulo, cod_articulo=cod_articulo_form)
-        articulo.delete()
-        return redirect('tabla_articulos') 
-    return HttpResponseForbidden("Acceso no permitido")
-
-@login_required
 def dar_de_baja_articulo(request):
     cod_articulo_form = request.POST.get('cod_articulo')
     tabla_origen = request.POST.get('tabla_origen')
@@ -110,8 +118,6 @@ def dar_de_baja_articulo(request):
     articulo = get_object_or_404(Articulo, cod_articulo=cod_articulo_form)
     articulo.dado_de_baja = True
     articulo.save()
-    messages.success(request, 'Artículo marcado como dado de baja.')
-    
     # Redirige según el origen
     if tabla_origen == 'tabla_insumos':
         return redirect('tabla_insumos')
@@ -120,3 +126,55 @@ def dar_de_baja_articulo(request):
     else:
         return redirect('tabla_articulos')
     
+
+
+@login_required
+def tabla_bajas(request, tipo=None):
+    if tipo == "Insumo_baja":
+        articulos = Articulo.objects.filter(dado_de_baja=True, tipo_articulo="Insumo")
+    elif tipo == "Activo_baja":
+        articulos = Articulo.objects.filter(dado_de_baja=True, tipo_articulo="Activo")
+    else:  # General
+        articulos = Articulo.objects.filter(dado_de_baja=True)
+    
+    data = {
+        'articulos': articulos,
+        'tipo_tabla': tipo if tipo else "General"
+    }
+    return render(request, 'inventario/tabla_bajas.html', data)
+
+
+@login_required
+def cancelar_baja(request):
+    cod_articulo_form = request.POST.get('cod_articulo')
+    tipo_tabla = request.POST.get('tipo_tabla')  # Puede ser "Insumo_baja", "Activo_baja" o "General" (valor predeterminado)
+
+    # Recuperar y actualizar el estado del artículo
+    articulo = get_object_or_404(Articulo, cod_articulo=cod_articulo_form)
+    articulo.dado_de_baja = False
+    articulo.save()
+    
+
+    # Redirigir según el origen de la tabla
+    if tipo_tabla == 'Insumo_baja':
+        return redirect('tabla_bajas_tipo', tipo='Insumo_baja')
+    elif tipo_tabla == 'Activo_baja':
+        return redirect('tabla_bajas_tipo', tipo='Activo_baja')
+    else:  # General
+        return redirect('tabla_bajas')
+
+
+@login_required
+def eliminar_articulo(request):
+    cod_articulo_form = request.POST.get('cod_articulo')
+    tipo_tabla = request.POST.get('tipo_tabla')  # Puede ser "Insumo", "Activo" o "General" (valor predeterminado)
+    articulo = Articulo.objects.get(cod_articulo = cod_articulo_form)
+    articulo.delete()
+
+    # Redirigir según el origen de la tabla
+    if tipo_tabla == 'Insumo':
+        return redirect('tabla_bajas_tipo', tipo='Insumo')
+    elif tipo_tabla == 'Activo':
+        return redirect('tabla_bajas_tipo', tipo='Activo')
+    else:  # General
+        return redirect('tabla_bajas')

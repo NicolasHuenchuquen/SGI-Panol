@@ -37,6 +37,8 @@
     <!-- Esta librería ya está incluida en el script de DataTables, por lo que puedes eliminar estos scripts si no los usas por separado. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <!-- SWEET ALERT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -81,12 +83,14 @@
                                     </form>
 
 
-                                    <form method="POST" action="{% url 'baja_articulo' %}">
+                                    <form method="POST" action="{% url 'baja_articulo' %}"
+                                        id="form-baja-{{ articulos.cod_articulo }}">
                                         {% csrf_token %}
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
                                         <input type="hidden" name="tabla_origen" value="tabla_activos">
-                                        <button type="submit" class="btn btn-danger">
-                                            <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+                                        <button type="button" class="btn btn-danger btn-dar-baja"
+                                            data-form-id="form-baja-{{ articulos.cod_articulo }}">
+                                            <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i>
                                         </button>
                                     </form>
                                 </div>
@@ -196,6 +200,69 @@
 
         </script>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Código para el botón "Dar de Baja"
+            const bajaButtons = document.querySelectorAll('.btn-dar-baja');
+
+            bajaButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const formId = this.getAttribute('data-form-id'); // Obtén el ID del formulario asociado
+                    const form = document.getElementById(formId);
+
+                    Swal.fire({
+                        title: "¿Dar de Baja el Artículo?",
+                        text: "Esta acción no se puede deshacer.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "rgb(168, 0, 0)", // Color del botón de confirmación
+                        cancelButtonColor: "#6c757d", // Color del botón de cancelar (Bootstrap btn-secondary)
+                        confirmButtonText: "Sí, dar de Baja",
+                        cancelButtonText: "Cancelar",
+                        reverseButtons: true, // Invierte el orden de los botones
+                        customClass: {
+                            cancelButton: 'btn btn-secondary', // Clase de Bootstrap para el botón de cancelar
+                            confirmButton: 'btn btn-danger' // Clase de Bootstrap para el botón de confirmar
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Dado de baja!",
+                                text: "El artículo fue dado de baja.",
+                                icon: "success",
+                                timer: 1500, // Tiempo visible en milisegundos
+                                showConfirmButton: false // Oculta el botón para no interferir
+                            });
+
+                            // Usa un retraso para que el mensaje se muestre completamente
+                            setTimeout(() => {
+                                form.submit(); // Enviar el formulario después de 3 segundos
+                            }, 1500); // Mismo tiempo que el 'timer'
+                        }
+                    });
+                });
+            });
+
+            // Código para mostrar el mensaje de éxito si existe
+            {% if messages %}
+            {% for message in messages %}
+            {% if 'articulo_editado' in message.tags and 'success' in message.tags %}
+            Swal.fire({
+                title: "¡Edición correcta!",
+                text: '{{ message }}',
+                icon: "success",
+                timer: 3000,
+            });
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        });
+    </script>
+
 </body>
 
 </html>

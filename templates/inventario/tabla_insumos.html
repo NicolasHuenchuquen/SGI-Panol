@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor Inventario Insumos</title>
+    <title>Gestor Inventario</title>
 
     <!-- BOOTSTRAP CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -37,6 +37,8 @@
     <!-- Esta librería ya está incluida en el script de DataTables, por lo que puedes eliminar estos scripts si no los usas por separado. -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <!-- SWEET ALERT -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -61,36 +63,37 @@
                     <tbody>
                         {% for articulos in articulos %}
                         <tr>
-                                <td>{{ articulos.cod_articulo }}</td>
-                                <td>{{ articulos.nombre }}</td>
-                                <td>{{ articulos.grupo }}</td>
-                                <td>{{ articulos.tipo_articulo }}</td>
-                                <td>{{ articulos.cantidad }}</td>
-                                <td>{{ articulos.ubicacion }}</td>
-                                <td>{{ articulos.observacion }}</td>
-                                <td>
-                                    <div id="botones_acciones" class="container d-flex justify-content-center p-0">
-                                        <!-- Reemplaza el form actual por este -->
-                                        <form method="POST" action="{% url 'editar_articulo' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
-                                            <input type="hidden" name="tabla_origen" value="tabla_insumos">
-                                            <button type="submit" class="btn btn-warning" style="margin-right: 10px;">
-                                                <i class="fa-solid fa-pencil" style="color: #ffffff;"></i>
-                                            </button>
-                                        </form>
+                            <td>{{ articulos.cod_articulo }}</td>
+                            <td>{{ articulos.nombre }}</td>
+                            <td>{{ articulos.grupo }}</td>
+                            <td>{{ articulos.tipo_articulo }}</td>
+                            <td>{{ articulos.cantidad }}</td>
+                            <td>{{ articulos.ubicacion }}</td>
+                            <td>{{ articulos.observacion }}</td>
+                            <td>
+                                <div id="botones_acciones" class="container d-flex justify-content-center p-0">
+                                    <form method="POST" action="{% url 'editar_articulo' %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
+                                        <input type="hidden" name="tabla_origen" value="tabla_insumos">
+                                        <button type="submit" class="btn btn-warning" style="margin-right: 10px;">
+                                            <i class="fa-solid fa-pencil" style="color: #ffffff;"></i>
+                                        </button>
+                                    </form>
 
 
-                                        <form method="POST" action="{% url 'baja_articulo' %}">
-                                            {% csrf_token %}
-                                            <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
-                                            <input type="hidden" name="tabla_origen" value="tabla_insumos">
-                                            <button type="submit" class="btn btn-danger">
-                                                <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
+                                    <form method="POST" action="{% url 'baja_articulo' %}"
+                                        id="form-baja-{{ articulos.cod_articulo }}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
+                                        <input type="hidden" name="tabla_origen" value="tabla_insumos">
+                                        <button type="button" class="btn btn-danger btn-dar-baja"
+                                            data-form-id="form-baja-{{ articulos.cod_articulo }}">
+                                            <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -135,7 +138,7 @@
                                         'font-size': '10pt', // Tamaño de fuente
                                         'white-space': 'normal', // Permite ajuste de línea
                                         'word-break': 'break-word', // Divide palabras largas
-                                        
+
                                     });
                                 });
                             }
@@ -178,7 +181,7 @@
                         },
                         {
                             //Boton para agregar insumo
-                            text: '<i class="fas fa-plus-circle"></i> Nuevo Insumo', 
+                            text: '<i class="fas fa-plus-circle"></i> Nuevo Insumo',
                             className: 'btn btn-success btn-sm',
                             action: function () {
                                 window.location.href = '/gestor-inventario/agregar_insumo/'; // Redirigir al formulario de Crear Insumo
@@ -191,11 +194,74 @@
                     }
                 });
             });
-
-
-
         </script>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Código para el botón "Dar de Baja"
+            const bajaButtons = document.querySelectorAll('.btn-dar-baja');
+
+            bajaButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const formId = this.getAttribute('data-form-id'); // Obtén el ID del formulario asociado
+                    const form = document.getElementById(formId);
+
+                    Swal.fire({
+                        title: "¿Dar de Baja el Artículo?",
+                        text: "Esta acción no se puede deshacer.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "rgb(168, 0, 0)", // Color del botón de confirmación
+                        cancelButtonColor: "#6c757d", // Color del botón de cancelar (Bootstrap btn-secondary)
+                        confirmButtonText: "Sí, dar de Baja",
+                        cancelButtonText: "Cancelar",
+                        reverseButtons: true, // Invierte el orden de los botones
+                        customClass: {
+                            cancelButton: 'btn btn-secondary', // Clase de Bootstrap para el botón de cancelar
+                            confirmButton: 'btn btn-danger' // Clase de Bootstrap para el botón de confirmar
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Dado de baja!",
+                                text: "El artículo fue dado de baja.",
+                                icon: "success",
+                                timer: 1500, // Tiempo visible en milisegundos
+                                showConfirmButton: false // Oculta el botón para no interferir
+                            });
+
+                            // Usa un retraso para que el mensaje se muestre completamente
+                            setTimeout(() => {
+                                form.submit(); // Enviar el formulario después de 3 segundos
+                            }, 1500); // Mismo tiempo que el 'timer'
+                        }
+                    });
+                });
+            });
+
+            // Código para mostrar el mensaje de éxito si existe
+            {% if messages %}
+            {% for message in messages %}
+            {% if 'articulo_editado' in message.tags and 'success' in message.tags %}
+            Swal.fire({
+                title: "¡Edición correcta!",
+                text: '{{ message }}',
+                icon: "success",
+                timer: 3000,
+            });
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+        });
+    </script>
+
+
 </body>
+
 
 </html>

@@ -43,26 +43,40 @@
                             <li><a class="dropdown-item" href="{% url 'historial_solicitudes' %}">HISTORIAL DE SOLICITUDES</a></li>
                         </ul>
                     </li>
-                    <!-- Dropdown Artículos -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="articulosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            ARTÍCULOS
+                            FORMULARIOS DE INGRESO
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="articulosDropdown">
                             <li><a class="dropdown-item" href="{% url 'agregar_insumo' %}">NUEVO INSUMO</a></li>
-                            <li><a class="dropdown-item" href="{% url 'tabla_insumos' %}">TABLA INSUMOS</a></li>
                             <li><a class="dropdown-item" href="{% url 'agregar_activo' %}">NUEVO ACTIVO</a></li>
-                            <li><a class="dropdown-item" href="{% url 'tabla_activos' %}">TABLA ACTIVOS</a></li>
+                        </ul>
+                    </li>
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="articulosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            INVENTARIOS
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="articulosDropdown">
+                            <li><a class="dropdown-item" href="{% url 'tabla_articulos' %}">GENERAL</a></li>
+                            <li><a class="dropdown-item" href="{% url 'tabla_insumos' %}">INSUMOS</a></li>
+                            <li><a class="dropdown-item" href="{% url 'tabla_activos' %}">ACTIVOS</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="articulosDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            DE BAJA
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="articulosDropdown">
+                            <li><a class="dropdown-item" href="{% url 'tabla_bajas' %}">GENERAL</a></li>
+                            <li><a class="dropdown-item" href="{% url 'tabla_bajas_tipo' 'Insumo_baja' %}">INSUMOS</a></li>
+                            <li><a class="dropdown-item" href="{% url 'tabla_bajas_tipo' 'Activo_baja' %}">ACTIVOS</a></li>
+                            
                             
                             
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'tabla_articulos' %}">INVENTARIO GENERAL</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">ELEMENTOS DE BAJA</a>
-                    </li>
+                    
                 </ul>
                 <div class="d-flex align-items-center ms-3">
                     {% if user.is_authenticated %}
