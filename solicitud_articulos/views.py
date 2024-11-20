@@ -42,10 +42,8 @@ def historial_solicitudes(request):
     fecha_inicio = request.GET.get('fecha_inicio', '')
     fecha_fin = request.GET.get('fecha_fin', '')
 
-    # Obtener todas las solicitudes
     solicitudes = SolicitudArticulo.objects.all()
 
-    # Filtrar por término de búsqueda
     if query:
         solicitudes = solicitudes.filter(
             Q(nombre_apellido__icontains=query) |
@@ -53,11 +51,9 @@ def historial_solicitudes(request):
             Q(asignatura__icontains=query)
         )
 
-    # Filtrar por un rango de fechas (sin considerar las horas)
     if fecha_inicio and fecha_fin:
         solicitudes = solicitudes.filter(fecha_salida__range=[fecha_inicio, fecha_fin])
 
-    # Preparar los datos para la plantilla
     solicitudes_con_nombre = []
     for solicitud in solicitudes:
         articulo = Articulo.objects.get(cod_articulo=solicitud.cod_articulo)
