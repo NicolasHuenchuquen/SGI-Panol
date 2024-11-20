@@ -17,17 +17,17 @@ class FormArticuloInsumo(forms.ModelForm):
     
     cod_articulo = forms.CharField(
         validators=[validators.MinLengthValidator(4), validators.MaxLengthValidator(15),validar_cod_articulo],
-        widget=forms.TextInput(attrs={'class': 'form-control', 'style':'margin-top: 13px'}),
+        widget=forms.TextInput(attrs={'class': 'form-control', 'style':'margin-top: 13px','placeholder': 'Ejemplo: CFTN1234 o IPN1234'}),
     )
 
     nombre = forms.CharField(
         validators=[validators.MinLengthValidator(3), validators.MaxLengthValidator(100)],
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Ingrese Nombre de Insumo'})
     )
 
     cantidad = forms.IntegerField(
         min_value=1, 
-        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        widget=forms.NumberInput(attrs={'class': 'form-control','placeholder': 'Ingrese Cantidad del Insumo'}),
         error_messages={
             'min_value': 'La cantidad debe ser un número positivo.'
         }
@@ -50,7 +50,7 @@ class FormArticuloInsumo(forms.ModelForm):
 
     ubicacion = forms.CharField(
         validators=[validators.MinLengthValidator(2), validators.MaxLengthValidator(8)],
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Ingrese la ubicación del Insumo'})
     )
 
     observacion = forms.CharField(
@@ -74,17 +74,17 @@ class FormArticuloActivo(forms.ModelForm):
     
     cod_articulo = forms.CharField(
         validators=[validators.MinLengthValidator(4), validators.MaxLengthValidator(15),validar_cod_articulo],
-        widget=forms.TextInput(attrs={'class': 'form-control', 'style':'margin-top: 13px'}),
+        widget=forms.TextInput(attrs={'class': 'form-control', 'style':'margin-top: 13px','placeholder': 'Ejemplo: CFTN1234 o IPN1234'}),
     )
 
     nombre = forms.CharField(
         validators=[validators.MinLengthValidator(3), validators.MaxLengthValidator(100)],
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Ingrese Nombre de Activo'})
     )
 
     cantidad = forms.IntegerField(
         min_value=1, 
-        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        widget=forms.NumberInput(attrs={'class': 'form-control','placeholder': 'Ingrese Cantidad del Activo'}),
         error_messages={
             'min_value': 'La cantidad debe ser un número positivo.'
         }
@@ -107,7 +107,7 @@ class FormArticuloActivo(forms.ModelForm):
 
     ubicacion = forms.CharField(
         validators=[validators.MinLengthValidator(2), validators.MaxLengthValidator(8)],
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Ingrese la ubicación del Activo'})
     )
 
     observacion = forms.CharField(
@@ -136,12 +136,12 @@ class FormArticuloEditar(forms.ModelForm):
 
     nombre = forms.CharField(
         validators=[validators.MinLengthValidator(3), validators.MaxLengthValidator(100)],
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Ingrese el nombre del Artículo'})
     )
         
     cantidad = forms.IntegerField(
         min_value=1, 
-        widget=forms.NumberInput(attrs={'class': 'form-control', }),
+        widget=forms.NumberInput(attrs={'class': 'form-control','placeholder': 'Ingrese la cantidad del Artículo'}),
         error_messages={
             'min_value': 'La cantidad debe ser un número positivo.'
         }
@@ -164,7 +164,7 @@ class FormArticuloEditar(forms.ModelForm):
 
     ubicacion = forms.CharField(
         validators=[validators.MinLengthValidator(2), validators.MaxLengthValidator(8)],
-        widget=forms.TextInput(attrs={'class': 'form-control'})
+        widget=forms.TextInput(attrs={'class': 'form-control','placeholder': 'Ingrese la ubicación del Artículo'})
     )
 
     observacion = forms.CharField(
