@@ -18,17 +18,17 @@ def crear_solicitud(request):
                     articulo.cantidad -= solicitud.cantidad
                     articulo.save()
                     solicitud.save()
-                    messages.success(request, 'La solicitud se ha creado correctamente y el stock se ha actualizado.')
+                    messages.success(request, 'La solicitud se ha creado correctamente y el stock se ha actualizado.', extra_tags='solicitud_creada')
                     return redirect('formulario_solicitudes') 
                 elif articulo.cantidad < solicitud.cantidad:
-                    messages.error(request, 'No hay stock suficiente para la solicitud')
+                    messages.error(request, 'No hay stock suficiente para la solicitud', extra_tags='avisos_form')
 
             else:
                 # Mensaje de error si el artículo no se encuentra
-                messages.error(request, 'El artículo con el código proporcionado no existe.')
+                messages.error(request, 'El artículo con el código proporcionado no existe.', extra_tags='avisos_form')
         else:
             # Mensaje de error si el formulario no es válido
-            messages.error(request, 'Por favor, corrija los errores en el formulario.')
+            messages.error(request, 'Por favor, corrija los errores en el formulario.', extra_tags='avisos_form')
 
     else:
         form = SolicitudArticuloForm()
