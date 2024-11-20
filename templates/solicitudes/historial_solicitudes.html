@@ -16,6 +16,30 @@
 
     <div class="container mt-5">
         <h2 class="titulo-seccion text-center titulo-seccion">Historial de Solicitudes</h2>
+        <br>
+        <br>
+
+        <form method="GET" class="mb-4">
+            <div class="row">
+                <div class="col-md-4">
+                    <p class="texto-blanco"><strong>Buscar por:</strong></p>
+                    <input type="text" name="q" class="form-control" placeholder="Nombre, RUT (sin puntos ni guión) o asignatura" value="{{ request.GET.q|default_if_none:'' }}">
+                </div>
+                <div class="col-md-3">
+                    <p class="texto-blanco"><strong>Fecha de salida:</strong></p>
+                    <input type="date" name="fecha_inicio" class="form-control" value="{{ request.GET.fecha_inicio|default_if_none:'' }}">
+                </div>
+                <div class="col-md-3">
+                    <p class="texto-blanco"><strong>Fecha de devolución:</strong></p>
+                    <input type="date" name="fecha_fin" class="form-control" value="{{ request.GET.fecha_fin|default_if_none:'' }}">
+                </div>
+                <div class="col-md-2">
+                    <p class="texto-blanco"><strong>Confirmar búsqueda:</strong></p>
+                    <button type="submit" class="btn cambiar-estado align-items-center justify-content-between d-flex ">Buscar</button>
+                </div>
+            </div>
+        </form>
+
         <div class="row">
             {% for item in solicitudes_con_nombre %}
                 <div class="col-md-4 mb-4">

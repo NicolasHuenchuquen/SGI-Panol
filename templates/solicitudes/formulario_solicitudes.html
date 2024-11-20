@@ -50,7 +50,7 @@
                 <!-- RUT -->
                 <div class="mb-3">
                     <label for="rut" class="form-label titulo-input">RUT</label>
-                    {{ form.rut|add_class:"form-control"|attr:"placeholder:Ejemplo: 123456789" }}
+                    {{ form.rut|add_class:"form-control"|attr:"placeholder:Ingrese el rut sin puntos ni guión" }}
                     {% if form.rut.errors %}
                     <div class="text-danger mt-1 small">
                         {{ form.rut.errors|striptags }}
