@@ -1,21 +1,22 @@
 .titulo-seccion {
     text-align: center;
     margin: 8px !important;
-    color: #a80000;
+    color: #982B1C;
 }
 
 .titulo-input {
-    color: white;
+    color: #982B1C;
     font-size: large !important;
+    font-weight: bold;
 }
 
 #contenedor {
-    background-color: #722828;
+    background-color: #eee;
     width: 100%; 
     max-width: 550px; 
     border-radius: 13px;
     padding: 20px;
-    border-color: #ff6f36;
+    border-color: #982B1C;
     margin: 0 auto; /* Centra el contenedor */
 }
 
@@ -30,7 +31,7 @@
 .formulario-solicitud {
     margin-left: 20px;
     margin-right: 20px;
-    background-color: #722828!important;
+    background-color: #eee!important;
 }
 
 #volver {
@@ -38,14 +39,20 @@
 }
 
 .btn.btn-agregar {
-    background-color: #ff6f36 !important;
+    background-color: #982B1C !important;
     color: white !important;
     transition: background-color 0.3s ease;
 }
 
 .btn.btn-agregar:hover {
-    background-color: rgb(7, 168, 7) !important;
+    background-color: #ff6f36!important;
     color: rgb(255, 255, 255) !important;
+}
+
+.text-danger {
+    color: red;
+    font-size: 0.875rem; /* Más pequeño que el texto normal */
+    margin-top: 4px;
 }
 
 /* Media Queries para Responsividad */

@@ -1,14 +1,20 @@
 .tarjeta{
-    background-color: #722828;
+    background-color: #eee;
     border-radius: 4px;
 }
 
 h5{
-    color:white !important;
+    color:#982B1C !important;
+    text-align: center;
+}
+
+.rut-1{
+    color:#982B1C !important;
+    text-align: center;
 }
 
 .titulo-seccion{
-    color: #a80000;
+    color: #982B1C;
 }
 
 .estado-devolucion {
@@ -22,8 +28,8 @@ h5{
 }
 
 .bg-parcialmente-devuelto {
-    background-color: #ab7106 !important;
-    color: #ffffff!important;
+    background-color: #eebb00 !important;
+    color: #722828!important;
 }
 
 .bg-devuelto {
@@ -38,17 +44,17 @@ h5{
 .table.table th,
 .table.table td {
     border-color: #722828;
-    background-color: #a53e3e;
-    color:white;
+    background-color: #ffffff;
+    color:#982B1C;
 }
 
 /* También puedes añadir un fondo transparente para asegurarte de que no se noten las celdas */
 .table.table {
-    border-color: #722828;
+    border-color: #982B1C;
 }
 
 .texto-blanco {
-    color: white;
+    color: #982B1C;
 }
 
 .rojo-intenso {
@@ -56,12 +62,12 @@ h5{
 }
 
 .cambiar-estado {
-    background-color: #ff6f36 !important;
+    background-color:  #982B1C !important;
     color: white !important;
     transition: background-color 0.3s ease;
 }
 
 .cambiar-estado:hover {
-    background-color: rgb(7, 168, 7) !important;
+    background-color:#ff6f36 !important;
     color: rgb(255, 255, 255) !important;
 }

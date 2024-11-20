@@ -29,90 +29,123 @@
                     {% endfor %}
                 {% endif %}
             
+                <!-- Nombre y Apellido -->
+                <div class="mb-3">
+                    <label for="nombre_apellido" class="form-label titulo-input">Nombre y Apellido</label>
+                    {{ form.nombre_apellido|add_class:"form-control"|attr:"placeholder:Ejemplo: Juan Pérez" }}
+                    {% if form.nombre_apellido.errors %}
+                        <div class="text-danger mt-1 small">
+                            {{ form.nombre_apellido.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- RUT -->
+                <div class="mb-3">
+                    <label for="rut" class="form-label titulo-input">RUT</label>
+                    {{ form.rut|add_class:"form-control"|attr:"placeholder:Ejemplo: 123456789" }}
+                    {% if form.rut.errors %}
+                        <div class="text-danger mt-1 small">
+                            {{ form.rut.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Asignatura -->
+                <div class="mb-3">
+                    <label for="asignatura" class="form-label titulo-input">Asignatura</label>
+                    {{ form.asignatura|add_class:"form-control"|attr:"placeholder:Ejemplo: Matemáticas" }}
+                    {% if form.asignatura.errors %}
+                        <div class="text-danger mt-1 small">
+                            {{ form.asignatura.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
+
                 <div class="row">
-                    <!-- Nombre y Apellido -->
-                    <div class="mb-3">
-                        <label for="nombre_apellido" class="form-label titulo-input">Nombre y Apellido</label>
-                        {{ form.nombre_apellido|add_class:"form-control"|attr:"placeholder:Ejemplo: Juan Pérez" }}
+                    <!-- Fecha de Salida -->
+                    <div class="col-md-6 mb-3">
+                        <label for="fecha_salida" class="form-label titulo-input">Fecha de Salida</label>
+                        {{ form.fecha_salida|add_class:"form-control"|attr:"placeholder:Ejemplo: 2024-11-09" }}
+                        {% if form.fecha_salida.errors %}
+                            <div class="text-danger mt-1 small">
+                                {{ form.fecha_salida.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <!-- Hora de Salida -->
+                    <div class="col-md-6 mb-3">
+                        <label for="hora_salida" class="form-label titulo-input">Hora de Salida</label>
+                        {{ form.hora_salida|add_class:"form-control"|attr:"placeholder:Ejemplo: 10:00" }}
+                        {% if form.hora_salida.errors %}
+                            <div class="text-danger mt-1 small">
+                                {{ form.hora_salida.errors|striptags }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
 
                 <div class="row">
-                     <!-- RUT -->
-                    <div class="mb-3">
-                        <label for="rut" class="form-label titulo-input">RUT</label>
-                        {{ form.rut|add_class:"form-control"|attr:"placeholder:Ejemplo: 123456789" }}
-                    </div>
-                </div>
-            
-                <div class="row">
-                    <!-- Asignatura -->
-                    <div class="mb-3">
-                        <label for="asignatura" class="form-label titulo-input">Asignatura</label>
-                        {{ form.asignatura|add_class:"form-control"|attr:"placeholder:Ejemplo: Matemáticas" }}
-                    </div>
-                </div>
-            
-                <div class="row">
-                     <!-- Fecha de Salida -->
-                     <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="fecha_salida" class="form-label titulo-input">Fecha de Salida</label>
-                            {{ form.fecha_salida|add_class:"form-control"|attr:"placeholder:Ejemplo: 2024-11-09" }}
-                        </div>
-                    </div>
-                    <!-- Hora de Salida -->
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="hora_salida" class="form-label titulo-input">Hora de Salida</label>
-                            {{ form.hora_salida|add_class:"form-control"|attr:"placeholder:Ejemplo: 10:00" }}
-                        </div>
-                    </div>
-            
                     <!-- Fecha de Devolución -->
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="fecha_devolucion" class="form-label titulo-input">Fecha de Devolución</label>
-                            {{ form.fecha_devolucion|add_class:"form-control"|attr:"placeholder:Ejemplo: 2024-11-10" }}
-                        </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="fecha_devolucion" class="form-label titulo-input">Fecha de Devolución</label>
+                        {{ form.fecha_devolucion|add_class:"form-control"|attr:"placeholder:Ejemplo: 2024-11-10" }}
+                        {% if form.fecha_devolucion.errors %}
+                            <div class="text-danger mt-1 small">
+                                {{ form.fecha_devolucion.errors|striptags }}
+                            </div>
+                        {% endif %}
                     </div>
                     <!-- Hora de Devolución -->
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="hora_devolucion" class="form-label titulo-input">Hora de Devolución</label>
-                            {{ form.hora_devolucion|add_class:"form-control"|attr:"placeholder:Ejemplo: 18:00" }}
-                        </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="hora_devolucion" class="form-label titulo-input">Hora de Devolución</label>
+                        {{ form.hora_devolucion|add_class:"form-control"|attr:"placeholder:Ejemplo: 18:00" }}
+                        {% if form.hora_devolucion.errors %}
+                            <div class="text-danger mt-1 small">
+                                {{ form.hora_devolucion.errors|striptags }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
-            
+
+                <!-- Código de Artículo -->
+                <div class="mb-3">
+                    <label for="codigo_articulo" class="form-label titulo-input">Código del Artículo</label>
+                    {{ form.cod_articulo|add_class:"form-control"|attr:"placeholder:Ejemplo: CFTN1234" }}
+                    {% if form.cod_articulo.errors %}
+                        <div class="text-danger mt-1 small">
+                            {{ form.cod_articulo.errors|striptags }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Cantidad -->
                 <div class="row">
-                    <!-- Código de Artículo -->
-                    <div class="mb-3">
-                        <label for="codigo_articulo" class="form-label titulo-input">Código del Artículo</label>
-                        {{ form.cod_articulo|add_class:"form-control"|attr:"placeholder:Ejemplo: CFTN1234" }}
+                    <div class="col-md-6 mb-3">
+                        <label for="cantidad" class="form-label titulo-input">Cantidad</label>
+                        {{ form.cantidad|add_class:"form-control"|attr:"placeholder:Ejemplo: 2" }}
+                        {% if form.cantidad.errors %}
+                            <div class="text-danger mt-1 small">
+                                {{ form.cantidad.errors|striptags }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <!-- Tipo de Solicitante -->
+                    <div class="col-md-6 mb-3">
+                        <label for="tipo_solicitante" class="form-label titulo-input">Solicitante</label>
+                        {{ form.tipo_solicitante|add_class:"form-control" }}
+                        {% if form.tipo_solicitante.errors %}
+                            <div class="text-danger mt-1 small">
+                                {{ form.tipo_solicitante.errors|striptags }}
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
-            
-                <div class="row">
-                    <!-- Cantidad -->
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="cantidad" class="form-label titulo-input">Cantidad</label>
-                            {{ form.cantidad|add_class:"form-control"|attr:"placeholder:Ejemplo: 2" }}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-3">
-                            <label for="tipo_solicitante" class="form-label titulo-input">Solicitante</label>
-                            {{ form.tipo_solicitante|add_class:"form-control" }}
-                        </div>
-                    </div>
-                </div>
-            
+
                 <div class="d-flex justify-content-center">
                     <button type="submit" class="btn btn-agregar">Enviar Solicitud</button>
                 </div>
-            </form>                        
+            </form>
         </div>
     </div>
 

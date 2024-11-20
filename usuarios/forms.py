@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Perfil
+import re
 
 from django.core.exceptions import ValidationError
 
@@ -40,6 +41,42 @@ class PanoleroCreationForm(forms.ModelForm):
 
     def clean_rut(self):
         rut = self.cleaned_data.get('rut')
+        
+        # Eliminar espacios y validar longitud máxima
+        rut = rut.replace(" ", "").upper()  # Convertir a mayúsculas y quitar espacios
+        if len(rut) > 9:
+            raise ValidationError("El RUT no puede tener más de 9 caracteres.")
+
+        # Validar que sólo tenga caracteres permitidos (números y 'K')
+        if not re.match(r'^\d{1,8}[0-9K]$', rut):
+            raise ValidationError("El RUT debe contener solo números o la letra K, sin puntos ni guiones.")
+
+        # Validar el dígito verificador (opcional, si deseas verificar su corrección)
+        if not self.validar_digito_verificador(rut):
+            raise ValidationError("El RUT ingresado no es válido.")
+
+        # Verificar unicidad
         if Perfil.objects.filter(rut=rut).exists():
             raise ValidationError("Este RUT ya está registrado.")
+
         return rut
+
+    def validar_digito_verificador(self, rut):
+        """
+        Valida el dígito verificador de un RUT chileno.
+        """
+        cuerpo = rut[:-1]
+        dv = rut[-1]
+
+        # Calcular dígito verificador
+        suma = 0
+        multiplicador = 2
+
+        for numero in reversed(cuerpo):
+            suma += int(numero) * multiplicador
+            multiplicador = 9 if multiplicador == 7 else multiplicador + 1
+
+        resto = 11 - (suma % 11)
+        dv_calculado = "K" if resto == 10 else "0" if resto == 11 else str(resto)
+
+        return dv == dv_calculado

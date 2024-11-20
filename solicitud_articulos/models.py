@@ -1,5 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django import forms
+import re
 
 class SolicitudArticulo(models.Model):
     TIPO_SOLICITANTE_CHOICES = [
@@ -27,3 +29,31 @@ class SolicitudArticulo(models.Model):
 
     def __str__(self):
         return f"{self.nombre_apellido} - RUT: {self.rut} - Asignatura: {self.asignatura}"
+
+    def clean_rut(self):
+        rut = self.cleaned_data.get('rut')
+
+        # Eliminar espacios en blanco al principio y al final
+        rut = rut.strip()
+
+        # Verificar que no exceda los 9 caracteres
+        if len(rut) > 9:
+            raise forms.ValidationError("El RUT no puede exceder los 9 caracteres.")
+
+        # Verificar que no contenga puntos ni guiones y solo números o 'k'
+        if not re.match(r'^\d{1,8}[kK0-9]$', rut):
+            raise forms.ValidationError("El RUT debe contener solo números y un dígito verificador ('k' o número), sin puntos ni guiones.")
+
+        return rut
+    
+    def clean_nombre_apellido(self):
+        nombre_apellido = self.cleaned_data.get('nombre_apellido')
+
+        # Elimina espacios en blanco adicionales
+        nombre_apellido = nombre_apellido.strip()
+
+        # Verifica que solo contenga letras y espacios
+        if not re.match(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', nombre_apellido):
+            raise forms.ValidationError("El nombre solo puede contener letras y espacios, sin números ni caracteres especiales.")
+
+        return nombre_apellido
