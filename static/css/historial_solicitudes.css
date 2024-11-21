@@ -19,7 +19,6 @@ h5{
 
 .estado-devolucion {
     display: flex;
-    gap: 10px;
 }
 
 .bg-no-devuelto {
@@ -72,3 +71,19 @@ h5{
     color: rgb(255, 255, 255) !important;
 }
 
+/* Ajusta el tamaño de los campos de fecha */
+.input-fecha {
+    font-size: 14px;
+    padding: 8px;
+    max-width: 100%;
+}
+
+/* Espaciado general entre los elementos */
+.g-2 {
+    gap: 0.5rem; /* Espacio entre las columnas */
+}
+
+/* Diseño del botón */
+.btn-primary {
+    width: 100%; /* Hace que el botón ocupe todo el espacio de su columna */
+}

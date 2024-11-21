@@ -14,28 +14,46 @@
 
     {% include 'navegacion/nav.html' %}
 
-    <div class="container mt-5">
+    <div class="container mt-4">
         <h2 class="titulo-seccion text-center titulo-seccion">Historial de Solicitudes</h2>
         <br>
         <br>
 
         <form method="GET" class="mb-4">
-            <div class="row">
-                <div class="col-md-4">
-                    <p class="texto-blanco"><strong>Buscar por:</strong></p>
-                    <input type="text" name="q" class="form-control" placeholder="Nombre, RUT (sin puntos ni guión) o asignatura" value="{{ request.GET.q|default_if_none:'' }}">
-                </div>
+            <div class="row g-3">
+                <!-- Campo de búsqueda por nombre, RUT o asignatura -->
                 <div class="col-md-3">
-                    <p class="texto-blanco"><strong>Fecha de salida:</strong></p>
-                    <input type="date" name="fecha_inicio" class="form-control" value="{{ request.GET.fecha_inicio|default_if_none:'' }}">
+                    <p class="texto-blanco mb-1"><strong>Buscar por:</strong></p>
+                    <input type="text" name="q" class="form-control" placeholder="Nombre, RUT o asignatura" value="{{ request.GET.q|default_if_none:'' }}">
                 </div>
-                <div class="col-md-3">
-                    <p class="texto-blanco"><strong>Fecha de devolución:</strong></p>
-                    <input type="date" name="fecha_fin" class="form-control" value="{{ request.GET.fecha_fin|default_if_none:'' }}">
-                </div>
+                
+                <!-- Campo de fecha de salida desde -->
                 <div class="col-md-2">
-                    <p class="texto-blanco"><strong>Confirmar búsqueda:</strong></p>
-                    <button type="submit" class="btn cambiar-estado align-items-center justify-content-between d-flex ">Buscar</button>
+                    <p class="texto-blanco mb-1"><strong>Salida desde:</strong></p>
+                    <input type="date" name="fecha_salida_inicio" class="form-control input-fecha" value="{{ request.GET.fecha_salida_inicio|default_if_none:'' }}">
+                </div>
+                
+                <!-- Campo de fecha de salida hasta -->
+                <div class="col-md-2">
+                    <p class="texto-blanco mb-1"><strong>Salida hasta:</strong></p>
+                    <input type="date" name="fecha_salida_fin" class="form-control input-fecha" value="{{ request.GET.fecha_salida_fin|default_if_none:'' }}">
+                </div>
+                
+                <!-- Campo de fecha de devolución desde -->
+                <div class="col-md-2">
+                    <p class="texto-blanco mb-1"><strong>Devolución desde:</strong></p>
+                    <input type="date" name="fecha_devolucion_inicio" class="form-control input-fecha" value="{{ request.GET.fecha_devolucion_inicio|default_if_none:'' }}">
+                </div>
+                
+                <!-- Campo de fecha de devolución hasta -->
+                <div class="col-md-2">
+                    <p class="texto-blanco mb-1"><strong>Devolución hasta:</strong></p>
+                    <input type="date" name="fecha_devolucion_fin" class="form-control input-fecha" value="{{ request.GET.fecha_devolucion_fin|default_if_none:'' }}">
+                </div>
+                
+                <!-- Botón de búsqueda -->
+                <div class="col-md-1 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary cambiar-estado">Buscar</button>
                 </div>
             </div>
         </form>
@@ -124,7 +142,7 @@
                                                         {% endif %}
                                                     </select>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary" {% if item.solicitud.estado_devolucion == 'devuelto' %}disabled{% endif %}>Actualizar</button>
+                                                <button type="submit" class="btn btn-primary cambiar-estado" {% if item.solicitud.estado_devolucion == 'devuelto' %}disabled{% endif %}>Actualizar</button>
                                             </form>
                                         </div>
                                     </div>
