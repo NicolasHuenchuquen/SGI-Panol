@@ -42,9 +42,11 @@ def crear_solicitud(request):
     return render(request, 'solicitudes/formulario_solicitudes.html', {'form': form})
 
 def historial_solicitudes(request):
-    query = request.GET.get('q', '').strip()  # Captura el término de búsqueda
-    fecha_inicio = request.GET.get('fecha_inicio', '')
-    fecha_fin = request.GET.get('fecha_fin', '')
+    query = request.GET.get('q', '').strip()
+    fecha_salida_inicio = request.GET.get('fecha_salida_inicio', '')
+    fecha_salida_fin = request.GET.get('fecha_salida_fin', '')
+    fecha_devolucion_inicio = request.GET.get('fecha_devolucion_inicio', '')
+    fecha_devolucion_fin = request.GET.get('fecha_devolucion_fin', '')
 
     solicitudes = SolicitudArticulo.objects.all()
 
@@ -55,8 +57,11 @@ def historial_solicitudes(request):
             Q(asignatura__icontains=query)
         )
 
-    if fecha_inicio and fecha_fin:
-        solicitudes = solicitudes.filter(fecha_salida__range=[fecha_inicio, fecha_fin])
+    if fecha_salida_inicio and fecha_salida_fin:
+        solicitudes = solicitudes.filter(fecha_salida__range=[fecha_salida_inicio, fecha_salida_fin])
+
+    if fecha_devolucion_inicio and fecha_devolucion_fin:
+        solicitudes = solicitudes.filter(fecha_devolucion__range=[fecha_devolucion_inicio, fecha_devolucion_fin])
 
     solicitudes_con_nombre = []
     for solicitud in solicitudes:
