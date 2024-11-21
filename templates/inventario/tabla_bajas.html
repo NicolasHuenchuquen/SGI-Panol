@@ -82,7 +82,7 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
                                         <input type="hidden" name="tabla_origen" value="{{ tipo_tabla|default:'' }}">
-                                        <button type="submit" class="btn btn-warning" style="margin-right: 10px;">
+                                        <button type="submit" class="btn btn-warning" style="margin-right: 10px;" title="Editar">
                                             <i class="fa-solid fa-pencil" style="color: #ffffff;"></i>
                                         </button>
                                     </form>
@@ -94,7 +94,7 @@
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
                                         <input type="hidden" name="tipo_tabla" value="{{ tipo_tabla|default:'' }}">
                                         <button type="button" class="btn btn-success btn-cancelar-baja"
-                                            data-form-id="form-cancelar-baja-{{ articulos.cod_articulo }}" style="margin-right: 10px;">
+                                            data-form-id="form-cancelar-baja-{{ articulos.cod_articulo }}" style="margin-right: 10px;" title="Cancelar Baja">
                                             <i class="fa-solid fa-undo" style="color: #ffffff;"></i>
                                         </button>
                                     </form>
@@ -105,7 +105,7 @@
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
                                         <input type="hidden" name="tipo_tabla" value="{{ tipo_tabla|default:'' }}">
                                         <button type="button" class="btn btn-danger btn-eliminar"
-                                            data-form-id="form-eliminar-{{ articulos.cod_articulo }}">
+                                            data-form-id="form-eliminar-{{ articulos.cod_articulo }}" title="Eliminar Artículo">
                                             <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
                                         </button>
                                     </form>

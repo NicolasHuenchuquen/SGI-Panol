@@ -71,7 +71,7 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
                                         <input type="hidden" name="tabla_origen" value="tabla_general">
-                                        <button type="submit" class="btn btn-warning" style="margin-right: 10px;">
+                                        <button type="submit" class="btn btn-warning" style="margin-right: 10px;" title="Editar">
                                             <i class="fa-solid fa-pencil" style="color: #ffffff;"></i>
                                         </button>
                                     </form>
@@ -83,7 +83,7 @@
                                         <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
                                         <input type="hidden" name="tabla_origen" value="tabla_general">
                                         <button type="button" class="btn btn-danger btn-dar-baja"
-                                            data-form-id="form-baja-{{ articulos.cod_articulo }}">
+                                            data-form-id="form-baja-{{ articulos.cod_articulo }}" title="Dar de Baja">
                                             <i class="fa-solid fa-arrow-down" style="color: #ffffff;"></i>
                                         </button>
                                     </form>
@@ -228,7 +228,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             Swal.fire({
-                                title: "Dado de baja!",
+                                title: "¡Dado de baja!",
                                 text: "El artículo fue dado de baja.",
                                 icon: "success",
                                 timer: 1000, // Tiempo visible en milisegundos

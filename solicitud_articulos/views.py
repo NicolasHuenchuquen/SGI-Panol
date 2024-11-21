@@ -13,7 +13,7 @@ def crear_solicitud(request):
             solicitud = form.save(commit=False)
 
             
-            articulo = Articulo.objects.filter(cod_articulo=solicitud.cod_articulo).first()
+            articulo = Articulo.objects.filter(cod_articulo=solicitud.cod_articulo,dado_de_baja=False).first()
 
             if articulo:
                 if articulo.cantidad >= solicitud.cantidad:
@@ -26,8 +26,12 @@ def crear_solicitud(request):
                     messages.error(request, 'No hay stock suficiente para la solicitud', extra_tags='avisos_form')
 
             else:
-                # Mensaje de error si el artículo no se encuentra
-                messages.error(request, 'El artículo con el código proporcionado no existe.', extra_tags='avisos_form')
+                # ESTO VERIFICA SI EL ARTICULO ESTA DADO DE BAJA
+                articulo_existente = Articulo.objects.filter(cod_articulo=solicitud.cod_articulo).exists()
+                if articulo_existente:
+                    messages.error(request, 'El artículo con el código proporcionado está dado de baja.', extra_tags='avisos_form')
+                else:
+                    messages.error(request, 'El artículo con el código proporcionado no existe.', extra_tags='avisos_form')
         else:
             # Mensaje de error si el formulario no es válido
             messages.error(request, 'Por favor, corrija los errores en el formulario.', extra_tags='avisos_form')
