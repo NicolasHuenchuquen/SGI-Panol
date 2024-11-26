@@ -5,7 +5,9 @@ from .models import SolicitudArticulo
 from gestor_inventario.models import Articulo
 from django.db.models import Q
 from datetime import datetime
+from django.contrib.auth.decorators import login_required
 
+@login_required(login_url='sesion_cerrada')
 def crear_solicitud(request):
     if request.method == 'POST':
         form = SolicitudArticuloForm(request.POST)
@@ -41,6 +43,7 @@ def crear_solicitud(request):
 
     return render(request, 'solicitudes/formulario_solicitudes.html', {'form': form})
 
+@login_required(login_url='sesion_cerrada')
 def historial_solicitudes(request):
     query = request.GET.get('q', '').strip()
     fecha_salida_inicio = request.GET.get('fecha_salida_inicio', '')
@@ -73,7 +76,7 @@ def historial_solicitudes(request):
 
     return render(request, 'solicitudes/historial_solicitudes.html', {'solicitudes_con_nombre': solicitudes_con_nombre})
 
-
+@login_required(login_url='sesion_cerrada')
 def actualizar_estado_devolucion(request, solicitud_id):
     solicitud = get_object_or_404(SolicitudArticulo, id=solicitud_id)
     

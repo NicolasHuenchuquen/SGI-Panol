@@ -81,10 +81,10 @@
                 <div class="d-flex align-items-center ms-3">
                     {% if user.is_authenticated %}
                         <span class="text-white me-2" style="font-size: 0.8rem;">{{ user.first_name }}  {{user.last_name}}</span>
-                        <a href="#" class="nav-link text-white me-2"><i class="fas fa-user-plus"></i></a>
+                        
                         <a href="{% url 'cerrar_sesion' %}" class="nav-link text-white"><i class="fas fa-sign-out-alt"></i></a>
                     {% else %}
-                        <a href="{% url 'login' %}" class="nav-link text-white">INICIAR SESIÓN</a>
+                        <a href="{% url 'iniciar_sesion' %}" class="nav-link text-white">INICIAR SESIÓN</a>
                     {% endif %}
                 </div>
             </div>

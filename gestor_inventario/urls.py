@@ -15,5 +15,5 @@ urlpatterns = [
 
     path('inventario_bajas/', views.tabla_bajas, name='tabla_bajas'),
     path('inventario_bajas/<str:tipo>/', views.tabla_bajas, name='tabla_bajas_tipo'),
-    path('eliminar_articulo/', views.eliminar_articulo, name='eliminar_articulo'),
+    # path('eliminar_articulo/', views.eliminar_articulo, name='eliminar_articulo'),
 ]

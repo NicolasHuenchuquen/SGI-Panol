@@ -7,19 +7,19 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # Create your views here.
 
-@login_required
+@login_required(login_url='sesion_cerrada')
 def tabla_articulos(request):
     articulos = Articulo.objects.filter(dado_de_baja=False)
     data = {'articulos' : articulos}
     return render(request, 'inventario/tabla_articulos.html', data)
 
-@login_required
+@login_required(login_url='sesion_cerrada')
 def tabla_insumos(request):
     articulos = Articulo.objects.filter(tipo_articulo="Insumo",dado_de_baja=False)
     data = {'articulos': articulos}
     return render(request, 'inventario/tabla_insumos.html', data)
 
-@login_required
+@login_required(login_url='sesion_cerrada')
 def tabla_activos(request):
     articulos = Articulo.objects.filter(tipo_articulo="Activo",dado_de_baja=False)
     data = {'articulos': articulos}
@@ -27,7 +27,7 @@ def tabla_activos(request):
 
 
 
-@login_required
+@login_required(login_url='sesion_cerrada')
 def agregar_insumo(request):
     form = FormArticuloInsumo()
     if request.method == 'POST':
@@ -39,7 +39,7 @@ def agregar_insumo(request):
     data = {'form': form}
     return render(request, 'inventario/agregar_insumo.html', data)
 
-@login_required
+@login_required(login_url='sesion_cerrada')
 def agregar_activo(request):
     form = FormArticuloActivo()
     if request.method == 'POST':
@@ -54,7 +54,7 @@ def agregar_activo(request):
     return render(request, 'inventario/agregar_activo.html', {'form': form})
 
 
-@login_required
+@login_required(login_url='sesion_cerrada')
 def editar_articulo(request):
     if request.method == 'POST':
         # Obtiene el código del artículo del form
@@ -110,7 +110,7 @@ def editar_articulo(request):
     return redirect('tabla_articulos')
 
 
-@login_required
+@login_required(login_url='sesion_cerrada')
 def dar_de_baja_articulo(request):
     cod_articulo_form = request.POST.get('cod_articulo')
     tabla_origen = request.POST.get('tabla_origen')
@@ -128,7 +128,7 @@ def dar_de_baja_articulo(request):
     
 
 
-@login_required
+@login_required(login_url='sesion_cerrada')
 def tabla_bajas(request, tipo=None):
     if tipo == "Insumo_baja":
         articulos = Articulo.objects.filter(dado_de_baja=True, tipo_articulo="Insumo")
@@ -144,7 +144,7 @@ def tabla_bajas(request, tipo=None):
     return render(request, 'inventario/tabla_bajas.html', data)
 
 
-@login_required
+@login_required(login_url='sesion_cerrada')
 def cancelar_baja(request):
     cod_articulo_form = request.POST.get('cod_articulo')
     tipo_tabla = request.POST.get('tipo_tabla')  # Puede ser "Insumo_baja", "Activo_baja" o "General" (valor predeterminado)
@@ -164,17 +164,18 @@ def cancelar_baja(request):
         return redirect('tabla_bajas')
 
 
-@login_required
-def eliminar_articulo(request):
-    cod_articulo_form = request.POST.get('cod_articulo')
-    tipo_tabla = request.POST.get('tipo_tabla')  # Puede ser "Insumo", "Activo" o "General" (valor predeterminado)
-    articulo = Articulo.objects.get(cod_articulo = cod_articulo_form)
-    articulo.delete()
+#CODIGO PARA ELIMINAR ARTICULOS DADOS DE BAJA SI EN ALGUN MOMENTO SE NECESITA
+# @login_required(login_url='sesion_cerrada')
+# def eliminar_articulo(request):
+#     cod_articulo_form = request.POST.get('cod_articulo')
+#     tipo_tabla = request.POST.get('tipo_tabla')  # Puede ser "Insumo", "Activo" o "General" (valor predeterminado)
+#     articulo = Articulo.objects.get(cod_articulo = cod_articulo_form)
+#     articulo.delete()
 
-    # Redirigir según el origen de la tabla
-    if tipo_tabla == 'Insumo':
-        return redirect('tabla_bajas_tipo', tipo='Insumo')
-    elif tipo_tabla == 'Activo':
-        return redirect('tabla_bajas_tipo', tipo='Activo')
-    else:  # General
-        return redirect('tabla_bajas')
+#     # Redirigir según el origen de la tabla
+#     if tipo_tabla == 'Insumo':
+#         return redirect('tabla_bajas_tipo', tipo='Insumo')
+#     elif tipo_tabla == 'Activo':
+#         return redirect('tabla_bajas_tipo', tipo='Activo')
+#     else:  # General
+#         return redirect('tabla_bajas')

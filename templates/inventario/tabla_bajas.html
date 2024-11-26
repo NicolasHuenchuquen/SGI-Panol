@@ -39,15 +39,15 @@
     {% include 'navegacion/nav.html' %}
     <main>
         {% if tipo_tabla == "Insumo_baja" %}
-        <h1>Articulos Dados De Baja Insumos</h1>
+        <h1 class="mt-5">Articulos Dados De Baja Insumos</h1>
         {% elif tipo_tabla == "Activo_baja" %}
-        <h1>Articulos Dados De Baja Activos</h1>
+        <h1 class="mt-5">Articulos Dados De Baja Activos</h1>
         {% else %}
-        <h1>Articulos Dados De Baja General</h1>
+        <h1 class="mt-5">Articulos Dados De Baja General</h1>
         {% endif %}
 
 
-        <div id="contenedor_tabla" class="container d-flex justify-content-center">
+        <div id="contenedor_tabla" class="container d-flex justify-content-center mt-4">
             <div class="table-responsive">
                 <table id="articulosTable" class="table table-striped table-bordered ">
                     <thead>
@@ -99,16 +99,7 @@
                                         </button>
                                     </form>
 
-                                    <form method="POST" action="{% url 'eliminar_articulo' %}"
-                                        id="form-eliminar-{{ articulos.cod_articulo }}">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="cod_articulo" value="{{ articulos.cod_articulo }}">
-                                        <input type="hidden" name="tipo_tabla" value="{{ tipo_tabla|default:'' }}">
-                                        <button type="button" class="btn btn-danger btn-eliminar"
-                                            data-form-id="form-eliminar-{{ articulos.cod_articulo }}" title="Eliminar Artículo">
-                                            <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
-                                        </button>
-                                    </form>
+                                    
 
                                 </div>
                             </td>
