@@ -49,6 +49,20 @@
     color: rgb(255, 255, 255) !important;
 }
 
+.agregar2 {
+    background-color: #1c9845 !important;
+    color: white !important;
+    object-position: center;
+    text-align: center;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.agregar2:hover {
+    background-color: #ff6f36!important;
+    color: rgb(255, 255, 255) !important;
+}
+
 .text-danger {
     color: red;
     font-size: 0.875rem; /* Más pequeño que el texto normal */

@@ -37,23 +37,23 @@ h5{
 }
 
 .table.table {
-    border-color: #722828;
+    border-color: #e1e0e0;
 }
 
 .table.table th,
 .table.table td {
-    border-color: #722828;
-    background-color: #ffffff;
-    color:#982B1C;
-}
 
-/* También puedes añadir un fondo transparente para asegurarte de que no se noten las celdas */
-.table.table {
-    border-color: #982B1C;
+    background-color: #d9c9c9 !important;
+    color:#591911 !important;
 }
 
 .texto-blanco {
-    color: #982B1C;
+    color: #591911 !important;
+}
+
+.texto-filtro {
+    color: #591911 !important;
+    font-size: small;
 }
 
 .rojo-intenso {
@@ -67,6 +67,17 @@ h5{
 }
 
 .cambiar-estado:hover {
+    background-color:#ff6f36 !important;
+    color: rgb(255, 255, 255) !important;
+}
+
+.cambiar-estado2 {
+    background-color:  #982B1C !important;
+    color: white !important;
+    transition: background-color 0.3s ease;
+}
+
+.cambiar-estado2:hover {
     background-color:#ff6f36 !important;
     color: rgb(255, 255, 255) !important;
 }
