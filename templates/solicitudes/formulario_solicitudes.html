@@ -184,56 +184,56 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-    const articulosContainer = document.getElementById('articulos-container');
-    const botonAgregarArticulo = document.getElementById('agregar-articulo');
-    let articuloIndex = 1; // Contador de artículos
+        const articulosContainer = document.getElementById('articulos-container');
+        const botonAgregarArticulo = document.getElementById('agregar-articulo');
+        let articuloIndex = 1; // Contador de artículos
 
-    botonAgregarArticulo.addEventListener('click', function () {
-        if (articuloIndex >= 20) { // Verificar el límite máximo de 19
-            alert('No puedes agregar más de 20 artículos.');
-            return;
-        }
+        botonAgregarArticulo.addEventListener('click', function () {
+            if (articuloIndex >= 20) { // Verificar el límite máximo de 19
+                alert('No puedes agregar más de 20 artículos.');
+                return;
+            }
 
-        articuloIndex++; // Incrementar el índice de artículo
+            articuloIndex++; // Incrementar el índice de artículo
 
-        const nuevoArticulo = document.createElement('div');
-        nuevoArticulo.classList.add('articulo-item', 'mb-3');
-        nuevoArticulo.id = `articulo-${articuloIndex}`;
+            const nuevoArticulo = document.createElement('div');
+            nuevoArticulo.classList.add('articulo-item', 'mb-3');
+            nuevoArticulo.id = `articulo-${articuloIndex}`;
 
-        nuevoArticulo.innerHTML = `
-            <div class="row">
-                <div class="col-md-5 mb-3">
-                    <label for="cod_articulo${articuloIndex}" class="form-label titulo-input">Código del Artículo</label>
-                    <input type="text" name="cod_articulo${articuloIndex}" id="cod_articulo${articuloIndex}" class="form-control" placeholder="Ejemplo: CFTN1234">
+            nuevoArticulo.innerHTML = `
+                <div class="row">
+                    <div class="col-md-5 mb-3">
+                        <label for="cod_articulo${articuloIndex}" class="form-label titulo-input">Código del Artículo</label>
+                        <input type="text" name="cod_articulo${articuloIndex}" id="cod_articulo${articuloIndex}" class="form-control" placeholder="Ejemplo: CFTN1234">
+                    </div>
+
+                    <div class="col-md-5 mb-3">
+                        <label for="cantidad${articuloIndex}" class="form-label titulo-input">Cantidad</label>
+                        <input type="number" name="cantidad${articuloIndex}" id="cantidad${articuloIndex}" class="form-control" placeholder="Ejemplo: 2">
+                    </div>
+
+                    <div class="col-md-2">
+                        <label for="cantidad${articuloIndex}" class="form-label titulo-input">Borrar</label>
+                        <a type="button" class="btn btn-danger btn-borrar justify-content-center d-flex mt-1" data-id="articulo-${articuloIndex}">
+                            <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+                        </a>
+                    </div>
                 </div>
+            `;
 
-                <div class="col-md-5 mb-3">
-                    <label for="cantidad${articuloIndex}" class="form-label titulo-input">Cantidad</label>
-                    <input type="number" name="cantidad${articuloIndex}" id="cantidad${articuloIndex}" class="form-control" placeholder="Ejemplo: 2">
-                </div>
+            articulosContainer.appendChild(nuevoArticulo);
 
-                <div class="col-md-2">
-                    <label for="cantidad${articuloIndex}" class="form-label titulo-input">Borrar</label>
-                    <a type="button" class="btn btn-danger btn-borrar justify-content-center d-flex mt-1" data-id="articulo-${articuloIndex}">
-                        <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
-                    </a>
-                </div>
-            </div>
-        `;
+            // Agregar evento al botón de borrar
+            nuevoArticulo.querySelector('.btn-borrar').addEventListener('click', function () {
+                const id = this.getAttribute('data-id');
+                const articuloABorrar = document.getElementById(id);
+                articulosContainer.removeChild(articuloABorrar);
 
-        articulosContainer.appendChild(nuevoArticulo);
-
-        // Agregar evento al botón de borrar
-        nuevoArticulo.querySelector('.btn-borrar').addEventListener('click', function () {
-            const id = this.getAttribute('data-id');
-            const articuloABorrar = document.getElementById(id);
-            articulosContainer.removeChild(articuloABorrar);
-
-            // Reducir el índice al eliminar un artículo
-            articuloIndex--;
+                // Reducir el índice al eliminar un artículo
+                articuloIndex--;
+            });
         });
     });
-});
     </script>
 
     <!-- BOOTSTRAP JS -->

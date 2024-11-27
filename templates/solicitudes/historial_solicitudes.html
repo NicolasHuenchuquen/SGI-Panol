@@ -107,11 +107,11 @@
                                         <td class="texto-blanco align-items-center">{{ user.first_name }} {{user.last_name}}</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Estado</strong></td>
+                                        <td class="texto-blanco"><strong>Estado</strong></td>
                                         <td style="text-align:center" class="{% if item.solicitud.estado_devolucion|lower == 'no devuelto' %}bg-no-devuelto
                                         {% elif item.solicitud.estado_devolucion|lower == 'parcialmente devuelto' %}bg-parcialmente-devuelto
                                         {% elif item.solicitud.estado_devolucion|lower == 'devuelto' %}bg-devuelto{% endif %}">
-                                            {{ item.solicitud.estado_devolucion }}
+                                            {{ item.solicitud.estado_devolucion|capfirst }}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -142,20 +142,20 @@
                                         <div class="modal-body">
                                             <table class="table table-bordered">
                                                 <thead>
-                                                    <tr>
-                                                        <th>Nombre</th>
-                                                        <th>Código</th>
-                                                        <th>Cantidad</th>
+                                                    <tr class="texto-blanco">
+                                                        <th class="texto-blanco">Nombre</th>
+                                                        <th class="texto-blanco">Código</th>
+                                                        <th class="texto-blanco">Cantidad</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {% if item.articulos_combinados %}
                                                         {% for cod_articulo, nombre_articulo, cantidad in item.articulos_combinados %}
-                                                            <tr>
+                                                            <tr class="texto-blanco">
                                                                 {% if not cod_articulo == null %}
-                                                                    <td>{{ nombre_articulo }}</td>
-                                                                    <td>{{ cod_articulo }}</td>
-                                                                    <td>{{ cantidad }}</td>
+                                                                    <td class="texto-blanco">{{ nombre_articulo }}</td>
+                                                                    <td class="texto-blanco">{{ cod_articulo }}</td>
+                                                                    <td class="texto-blanco">{{ cantidad }}</td>
                                                                 {% endif %}
                                                             </tr>
                                                         {% endfor %}

@@ -23,10 +23,6 @@ class SolicitudArticulo(models.Model):
     fecha_devolucion = models.DateField()  
     hora_devolucion = models.TimeField()
 
-    #Es la cosa más ineficiente que he hecho en mi vida. Se puede optimizar creando 2 modelos, uno para el solicitante, y otro para el/los articulos. 
-    #La idea es que se vincule la solicitud del articulo al solicitante mediante ids, y que se manejen solo dos variables con diccionarios dentro.
-    #No se pudo realizar de esa forma, pero probablemente se puede mejorar, para quien se anime a realizarlo
-
     cod_articulo1 = models.CharField(max_length=50)
     cantidad1 = models.PositiveIntegerField()
 
@@ -90,6 +86,17 @@ class SolicitudArticulo(models.Model):
 
     tipo_solicitante = models.CharField(max_length=10, choices=TIPO_SOLICITANTE_CHOICES, default='otro',)
     estado_devolucion = models.CharField(max_length=50, choices=ESTADO_DEVOLUCION_CHOICES, default='no devuelto',)
+
+    def save(self, *args, **kwargs):
+            # Transformar todos los campos cod_articulo1 a cod_articulo20 a mayúsculas antes de guardar
+            for i in range(1, 21):
+                cod_articulo_field = f'cod_articulo{i}'
+                cod_articulo_value = getattr(self, cod_articulo_field, None)
+                if cod_articulo_value:
+                    setattr(self, cod_articulo_field, cod_articulo_value.strip().upper())
+
+            # Llamar al método `save` del modelo para guardar la instancia
+            super(SolicitudArticulo, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.nombre_apellido} - RUT: {self.rut} - Asignatura: {self.asignatura}"
