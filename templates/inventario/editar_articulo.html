@@ -106,7 +106,23 @@
 
 
                     <div class="d-flex justify-content-center m-3">
-                        <a href="{% url 'tabla_articulos' %}" class="btn btn-dark" id="volver">Volver</a>
+                        <a href="{% if tabla_origen == 'tabla_insumos' %}
+                                {% url 'tabla_insumos' %}
+                            {% elif tabla_origen == 'tabla_activos' %}
+                                {% url 'tabla_activos' %}
+                            {% elif tabla_origen == 'tabla_general' %}
+                                {% url 'tabla_articulos' %}
+                            {% elif tabla_origen == 'General' %}
+                                {% url 'tabla_bajas' %}
+                            {% elif tabla_origen == 'Insumo_baja' %}
+                                {% url 'tabla_bajas_tipo' tipo='Insumo_baja' %}
+                            {% elif tabla_origen == 'Activo_baja' %}
+                                {% url 'tabla_bajas_tipo' tipo='Activo_baja' %}
+                            {% else %}
+                                {% url 'tabla_articulos' %}
+                            {% endif %}" class="btn btn-dark" id="volver">
+                            Volver
+                        </a>
 
                         <input type="hidden" name="tabla_origen" value="{{ tabla_origen }}">
                         <button type="submit" class="btn btn-success">Guardar

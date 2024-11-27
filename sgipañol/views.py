@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
-
+#PARA MANEJAR EL ERROR DE CSRF TOKEN
+from django.shortcuts import render
 
 @login_required(login_url='sesion_cerrada')
 def navbar(request):
@@ -32,3 +33,15 @@ def iniciar_sesion(request):
 def cerrar_sesion(request):
     logout(request)
     return redirect('iniciar_sesion')
+
+
+def csrf_error(request, reason=""):
+    # Detecta la URL de origen del error
+    referer = request.META.get('HTTP_REFERER', '/')
+    
+    # Renderiza la misma página con un indicador de error
+    return render(request, 'navegacion/csrf_error.html', {
+        'error_csrf': True,
+        'reason': reason,
+        'referer': referer,
+    })
