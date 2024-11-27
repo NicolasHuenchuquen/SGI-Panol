@@ -84,7 +84,7 @@ def editar_articulo(request):
                 elif tabla_origen == 'tabla_general':
                     return redirect('tabla_articulos')
                 
-                elif tabla_origen == 'tabla_bajas':
+                elif tabla_origen == 'General':
                     return redirect('tabla_bajas')
                 
                 elif tabla_origen == 'Insumo_baja':
