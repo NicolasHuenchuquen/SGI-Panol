@@ -14,15 +14,15 @@
 
     {% include 'navegacion/nav.html' %}
 
-    <div class="container mt-4">
-        <h2 class="titulo-seccion text-center titulo-seccion">Historial de Solicitudes</h2>
+        <div class="container mt-5">
+        <h2 class="titulo-seccion text-center">Historial de Solicitudes</h2>
         <br>
         <br>
 
         <form method="GET" class="mb-4">
             <div class="row g-3">
                 <!-- Campo de búsqueda por nombre, RUT o asignatura -->
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <p class="texto-blanco mb-1"><strong>Buscar por:</strong></p>
                     <input type="text" name="q" class="form-control" placeholder="Nombre, RUT o asignatura" value="{{ request.GET.q|default_if_none:'' }}">
                 </div>
@@ -35,7 +35,7 @@
                 
                 <!-- Campo de fecha de salida hasta -->
                 <div class="col-md-2">
-                    <p class="texto-blanco mb-1"><strong>Salida hasta:</strong></p>
+                    <p class="texto-blanco mb-1"><strong>Hasta:</strong></p>
                     <input type="date" name="fecha_salida_fin" class="form-control input-fecha" value="{{ request.GET.fecha_salida_fin|default_if_none:'' }}">
                 </div>
                 
@@ -47,28 +47,41 @@
                 
                 <!-- Campo de fecha de devolución hasta -->
                 <div class="col-md-2">
-                    <p class="texto-blanco mb-1"><strong>Devolución hasta:</strong></p>
+                    <p class="texto-blanco mb-1"><strong>Hasta:</strong></p>
                     <input type="date" name="fecha_devolucion_fin" class="form-control input-fecha" value="{{ request.GET.fecha_devolucion_fin|default_if_none:'' }}">
+                </div>
+
+                <div class="col-md-1">
+                    <p class="texto-blanco mb-1" ="estado_devolucion"><strong>Estado</strong></p>
+                    <select name="estado_devolucion" class="form-control" id="estado_devolucion">
+                        <option value="" {% if estado_devolucion == "" %}selected{% endif %}>Todos</option>
+                        <option value="devuelto" {% if estado_devolucion == "devuelto" %}selected{% endif %}>Devuelto</option>
+                        <option value="parcialmente devuelto" {% if estado_devolucion == "parcialmente devuelto" %}selected{% endif %}>Parcialmente devuelto &nbsp &nbsp</option>
+                        <option value="no devuelto" {% if estado_devolucion == "no devuelto" %}selected{% endif %}>No devuelto</option>
+                    </select>
                 </div>
                 
                 <!-- Botón de búsqueda -->
                 <div class="col-md-1 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary cambiar-estado">Buscar</button>
                 </div>
+                    
             </div>
         </form>
 
         <div class="row">
             {% for item in solicitudes_con_nombre %}
-                <div class="col-md-4 mb-4">
+                <div class="col-md-4 mb-5">
                     <div class="card tarjeta">
                         <div class="card-body tarjeta">
+                            <h5 class="card-title titulo-tarjeta texto-blanco">
+                                <strong>{{ item.solicitud.nombre_apellido }}</strong>
+                            </h5>
+                            <p class="rut-1">
+                                <strong>RUT: </strong><span class="rut">{{ item.solicitud.rut }}</span>
+                            </p>
+                            <br>
                             <table class="table table-bordered">
-                                <thead class="titulo-tabla">
-                                    <h5 class="card-title titulo-tarjeta texto-blanco"><strong>{{ item.solicitud.nombre_apellido }}</strong></h5>
-                                    <p class="rut-1"><strong>RUT:</strong> <span class="rut">{{ item.solicitud.rut }}</span></p>
-                                </thead>
-
                                 <thead>
                                     <tr>
                                         <th class="texto-blanco">Detalle</th>
@@ -76,46 +89,89 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!-- Fechas y horas -->
                                     <tr>
                                         <td class="texto-blanco"><strong>Fecha y hora de salida</strong></td>
-                                        <td class="texto-blanco">{{ item.solicitud.fecha_salida }} - {{ item.solicitud.hora_salida }}</td>
+                                        <td class="texto-blanco">{{ item.solicitud.fecha_salida }} -- {{ item.solicitud.hora_salida }}</td>
                                     </tr>
                                     <tr>
                                         <td class="texto-blanco"><strong>Fecha y hora de devolución</strong></td>
-                                        <td class="texto-blanco">{{ item.solicitud.fecha_devolucion }} - {{ item.solicitud.hora_devolucion }}</td>
+                                        <td class="texto-blanco">{{ item.solicitud.fecha_devolucion }} -- {{ item.solicitud.hora_devolucion }}</td>
                                     </tr>
                                     <tr>
                                         <td class="texto-blanco"><strong>Asignatura a utilizar</strong></td>
                                         <td class="texto-blanco">{{ item.solicitud.asignatura }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="texto-blanco"><strong>Código artículo</strong></td>
-                                        <td class="texto-blanco">{{ item.solicitud.cod_articulo }}</td>
+                                        <td class="texto-blanco"><strong>Encargado</strong></td>
+                                        <td class="texto-blanco align-items-center">{{ user.first_name }} {{user.last_name}}</td>
                                     </tr>
                                     <tr>
-                                        <td class="texto-blanco"><strong>Nombre artículo</strong></td>
-                                        <td class="texto-blanco">{{ item.nombre_articulo }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="texto-blanco"><strong>Cantidad</strong></td>
-                                        <td class="texto-blanco">{{ item.solicitud.cantidad }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Estado de devolución</strong></td>
-                                        <td style="text-align:center" class="{% if item.solicitud.estado_devolucion == 'no devuelto' %}bg-no-devuelto{% elif item.solicitud.estado_devolucion == 'parcialmente devuelto' %}bg-parcialmente-devuelto{% elif item.solicitud.estado_devolucion == 'devuelto' %}bg-devuelto{% endif %}">
+                                        <td><strong>Estado</strong></td>
+                                        <td style="text-align:center" class="{% if item.solicitud.estado_devolucion|lower == 'no devuelto' %}bg-no-devuelto
+                                        {% elif item.solicitud.estado_devolucion|lower == 'parcialmente devuelto' %}bg-parcialmente-devuelto
+                                        {% elif item.solicitud.estado_devolucion|lower == 'devuelto' %}bg-devuelto{% endif %}">
                                             {{ item.solicitud.estado_devolucion }}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
-
-                            <div class="d-flex justify-content-center mt-3">
-                                <button type="button" class="btn cambiar-estado" data-bs-toggle="modal" data-bs-target="#modalCambiarEstado{{ item.solicitud.id }}">
-                                    Cambiar Estado
-                                </button>
+                            <br>
+                            <!-- Botones para acciones -->
+                             <div class="row">
+                                <div class="col d-flex justify-content-center">
+                                    <button type="button" class="btn cambiar-estado" data-bs-toggle="modal" data-bs-target="#modalCambiarEstado{{ item.solicitud.id }}">
+                                        Cambiar Estado
+                                    </button>
+                                </div>
+                                <div class="col d-flex justify-content-center">
+                                    <button type="button" class="btn cambiar-estado2" data-bs-toggle="modal" data-bs-target="#modalDetalles{{ item.solicitud.id }}">
+                                        Ver Detalles
+                                    </button>
+                                </div>
                             </div>
-                           
-                            <!-- Modal para actualizar el estado de cada solicitud -->
+        
+                            <!-- Modal para ver detalles de artículos -->
+                            <div class="modal fade" id="modalDetalles{{ item.solicitud.id }}" tabindex="-1" aria-labelledby="modalDetallesLabel{{ item.solicitud.id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="modalDetallesLabel{{ item.solicitud.id }}">Solicitudes de {{item.solicitud.nombre_apellido}}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nombre</th>
+                                                        <th>Código</th>
+                                                        <th>Cantidad</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% if item.articulos_combinados %}
+                                                        {% for cod_articulo, nombre_articulo, cantidad in item.articulos_combinados %}
+                                                            <tr>
+                                                                {% if not cod_articulo == null %}
+                                                                    <td>{{ nombre_articulo }}</td>
+                                                                    <td>{{ cod_articulo }}</td>
+                                                                    <td>{{ cantidad }}</td>
+                                                                {% endif %}
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <tr>
+                                                            <td colspan="3">No hay artículos disponibles.</td>
+                                                        </tr>
+                                                    {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <!-- Modal para actualizar el estado de la solicitud -->
                             <div class="modal fade" id="modalCambiarEstado{{ item.solicitud.id }}" tabindex="-1" aria-labelledby="modalCambiarEstadoLabel{{ item.solicitud.id }}" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
@@ -130,24 +186,24 @@
                                                     <label for="estado_devolucion_{{ item.solicitud.id }}" class="form-label">Selecciona el nuevo estado</label>
                                                     <select class="form-select" name="estado_devolucion" id="estado_devolucion_{{ item.solicitud.id }}" required>
                                                         {% if item.solicitud.estado_devolucion == 'parcialmente devuelto' %}
-                                                            <!-- Si está parcialmente devuelto, permitir solo cambiar a devuelto -->
                                                             <option value="devuelto">Devuelto</option>
                                                         {% elif item.solicitud.estado_devolucion == 'no devuelto' %}
-                                                            <!-- Si no está devuelto, permitir cambiar a parcialmente devuelto o devuelto -->
                                                             <option value="devuelto">Devuelto</option>
                                                             <option value="parcialmente devuelto">Parcialmente devuelto</option>
                                                         {% else %}
-                                                            <!-- Si ya está devuelto, no mostrar ninguna opción -->
                                                             <option value="devuelto" selected>Devuelto</option>
                                                         {% endif %}
                                                     </select>
                                                 </div>
-                                                <button type="submit" class="btn btn-primary cambiar-estado" {% if item.solicitud.estado_devolucion == 'devuelto' %}disabled{% endif %}>Actualizar</button>
+                                                <button type="submit" class="btn btn-primary cambiar-estado" {% if item.solicitud.estado_devolucion == 'devuelto' %}disabled{% endif %}>
+                                                    Actualizar
+                                                </button>
                                             </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+        
                         </div>
                     </div>
                 </div>
@@ -157,8 +213,7 @@
                 </div>
             {% endfor %}
         </div>
-    </div>
-
+    
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             // Función para formatear el RUT
@@ -187,8 +242,8 @@
             });
         });
     </script>
-
-    <!-- BOOTSTRAP JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12XpAyjCpIt2RO1IN80CEqMK2mYlJrNJA7PAT1o+R/9g6PSV" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+YI7Yh6IYG+b4YEu5tK9KKbQyS4h4" crossorigin="anonymous"></script>
 </body>
 </html>
