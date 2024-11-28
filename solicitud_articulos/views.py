@@ -11,7 +11,6 @@ from django.views.generic.edit import FormView
 from itertools import zip_longest
 from collections import defaultdict
 
-
 @login_required(login_url='sesion_cerrada')
 def crear_solicitud(request):
     if request.method == 'POST':
@@ -31,7 +30,14 @@ def crear_solicitud(request):
                 cantidad = form.cleaned_data.get(cantidad_field)
 
                 if cod_articulo and cantidad:
-                    cantidades_por_articulo[cod_articulo] += cantidad  # Acumular cantidad para este código
+                    # Convertir el código de artículo a mayúsculas antes de usarlo y almacenarlo
+                    cod_articulo = cod_articulo.strip().upper()
+
+                    # Almacenar el código de artículo transformado
+                    form.cleaned_data[cod_articulo_field] = cod_articulo  # Reasignar el valor transformado
+
+                    # Acumular cantidad para este código
+                    cantidades_por_articulo[cod_articulo] += cantidad
 
             # Validar stock y actualizar artículos
             for cod_articulo, total_cantidad in cantidades_por_articulo.items():

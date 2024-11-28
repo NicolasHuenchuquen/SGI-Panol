@@ -22,17 +22,17 @@ h5{
 }
 
 .bg-no-devuelto {
-    background-color: #ff0019 !important; 
+    background-color: #ff0019!important; 
     color: #ffffff!important;  
 }
 
 .bg-parcialmente-devuelto {
-    background-color: #eebb00 !important;
+    background-color: #eebb00!important;
     color: #722828!important;
 }
 
 .bg-devuelto {
-    background-color: #008f13 !important;
+    background-color: #008f13!important;
     color: #ffffff!important;
 }
 
@@ -40,19 +40,12 @@ h5{
     border-color: #e1e0e0;
 }
 
-.table.table th,
-.table.table td {
-
-    background-color: #d9c9c9 !important;
-    color:#591911 !important;
-}
-
 .texto-blanco {
-    color: #591911 !important;
+    color: #982B1C !important;
 }
 
 .texto-filtro {
-    color: #591911 !important;
+    color: #982B1C !important;
     font-size: small;
 }
 
