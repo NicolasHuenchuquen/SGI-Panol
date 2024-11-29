@@ -60,10 +60,20 @@
                         <option value="no devuelto" {% if estado_devolucion == "no devuelto" %}selected{% endif %}>No devuelto</option>
                     </select>
                 </div>
+
+                <div class="col-md-1">
+                    <p class="texto-blanco mb-1"><strong>Atrasado</strong></p>
+                    <select name="atrasado" class="form-control" id="atrasado">
+                        <option value="" {% if not atrasado %}selected{% endif %}>Todos</option>
+                        <option value="False" {% if atrasado == "False" %}selected{% endif %}>No</option>
+                        <option value="True" {% if atrasado == "True" %}selected{% endif %}>Sí</option>
+                    </select>
+                </div>
+                
                 
                 <!-- Botón de búsqueda -->
-                <div class="col-md-1 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary cambiar-estado">Buscar</button>
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary cambiar-estado" style="width: 100px; ">Buscar</button>
                 </div>
                     
             </div>
@@ -118,7 +128,7 @@
                             </table>
                             <br>
                             <!-- Botones para acciones -->
-                             <div class="row">
+                            <div class="row">
                                 <div class="col d-flex justify-content-center">
                                     <button type="button" class="btn cambiar-estado" data-bs-toggle="modal" data-bs-target="#modalCambiarEstado{{ item.solicitud.id }}">
                                         Cambiar Estado

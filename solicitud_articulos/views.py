@@ -10,6 +10,7 @@ from django.forms import formset_factory
 from django.views.generic.edit import FormView
 from itertools import zip_longest
 from collections import defaultdict
+from django.utils import timezone
 
 @login_required(login_url='sesion_cerrada')
 def crear_solicitud(request):
@@ -73,22 +74,46 @@ def crear_solicitud(request):
 
     return render(request, 'solicitudes/formulario_solicitudes.html', {'form': form})
 
+from django.utils import timezone
+
+
 @login_required(login_url='sesion_cerrada')
 def historial_solicitudes(request):
+    # Obtener la fecha y hora actuales
+    now = timezone.now()
+
+    # Actualizar automáticamente los registros atrasados
+    atrasados_actualizados = SolicitudArticulo.objects.filter(
+        estado_devolucion='no devuelto',
+    ).filter(
+        # Verificar si la fecha de devolución es menor a la actual
+        Q(fecha_devolucion__lt=now.date()) | 
+        # O si la fecha de devolución es hoy y la hora ya pasó
+        Q(fecha_devolucion=now.date(), hora_devolucion__lt=now.time())
+    ).update(atrasado=True)
+
+    print(f"Atrasados actualizados: {atrasados_actualizados}")  # Log para depuración
+
+    # Actualizar solicitudes con estado de devolución devuelto o parcialmente devuelto
+    solicitudes_actualizadas = SolicitudArticulo.objects.filter(
+        estado_devolucion__in=['devuelto', 'parcialmente devuelto']
+    ).update(atrasado=False)  # Actualizar 'atrasado' a False si ya fue devuelto
+
+    print(f"Atrasados actualizados por devolución: {solicitudes_actualizadas}")  # Log para depuración
+
+    # Filtros de búsqueda
     query = request.GET.get('q', '').strip()
     fecha_salida_inicio = request.GET.get('fecha_salida_inicio', '')
     fecha_salida_fin = request.GET.get('fecha_salida_fin', '')
     fecha_devolucion_inicio = request.GET.get('fecha_devolucion_inicio', '')
     fecha_devolucion_fin = request.GET.get('fecha_devolucion_fin', '')
     estado_devolucion = request.GET.get('estado_devolucion', '')
+    atrasado = request.GET.get('atrasado', '')  # Filtro para "atrasado"
+
+    # Base de solicitudes
     solicitudes = SolicitudArticulo.objects.all()
-    articulos = Articulo.objects.all()
 
-    # Recoger los valores de los 20 códigos de artículo y cantidades
-    cod_articulos = [request.GET.get(f'cod_articulo{i}', '').strip() for i in range(1, 21)]
-    cantidades = [request.GET.get(f'cantidad{i}', '').strip() for i in range(1, 21)]  # Nueva lógica para cantidad
-
-    # Filtrar por nombre, rut o asignatura si existe el query
+    # Filtro de búsqueda general
     if query:
         solicitudes = solicitudes.filter(
             Q(nombre_apellido__icontains=query) |
@@ -97,44 +122,44 @@ def historial_solicitudes(request):
             Q(estado_devolucion__icontains=query)
         )
 
-    # Filtrar por rango de fechas si existe
+    # Filtro por rango de fechas de salida
     if fecha_salida_inicio and fecha_salida_fin:
         solicitudes = solicitudes.filter(fecha_salida__range=[fecha_salida_inicio, fecha_salida_fin])
 
+    # Filtro por rango de fechas de devolución
     if fecha_devolucion_inicio and fecha_devolucion_fin:
         solicitudes = solicitudes.filter(fecha_devolucion__range=[fecha_devolucion_inicio, fecha_devolucion_fin])
 
-    # Filtrar por los códigos de artículo proporcionados
-    for i, cod_articulo in enumerate(cod_articulos, 1):
-        if cod_articulo:
-            solicitudes = solicitudes.filter(**{f'cod_articulo{i}__icontains': cod_articulo})
-
-    # Filtrar por las cantidades proporcionadas
-    for i, cantidad in enumerate(cantidades, 1):
-        if cantidad:
-            solicitudes = solicitudes.filter(**{f'cantidad{i}__icontains': cantidad})
-    
+    # Filtro por estado de devolución
     if estado_devolucion:
         solicitudes = solicitudes.filter(estado_devolucion__iexact=estado_devolucion)
 
-    # Hacer una consulta para obtener todos los artículos necesarios
-    articulos_dict = {articulo.cod_articulo: articulo.nombre for articulo in Articulo.objects.filter(
-        cod_articulo__in=[getattr(solicitud, f'cod_articulo{i}', None) for solicitud in solicitudes for i in range(1, 21) if getattr(solicitud, f'cod_articulo{i}', None)]
-    )}
+    # Filtro por estado de "atrasado"
+    if atrasado:
+        if atrasado == 'True':
+            solicitudes = solicitudes.filter(atrasado=True)
+        elif atrasado == 'False':
+            solicitudes = solicitudes.filter(atrasado=False)
+
+    # Construir lista con nombres de artículos
+    articulos_dict = {
+        articulo.cod_articulo: articulo.nombre
+        for articulo in Articulo.objects.filter(
+            cod_articulo__in=[getattr(solicitud, f'cod_articulo{i}', None) for solicitud in solicitudes for i in range(1, 21) if getattr(solicitud, f'cod_articulo{i}', None)]
+        )
+    }
 
     solicitudes_con_nombre = []
 
     for solicitud in solicitudes:
         articulos_info = []
         nombres_articulos = []
-        cantidades_info = []  # Para almacenar las cantidades
+        cantidades_info = []
 
-        # Recorremos los 20 artículos de cada solicitud
         for i in range(1, 21):
             cod_articulo = getattr(solicitud, f'cod_articulo{i}', None)
             cantidad = getattr(solicitud, f'cantidad{i}', None)
             if cod_articulo:
-                # Usar el diccionario para obtener el nombre del artículo
                 nombre_articulo = articulos_dict.get(cod_articulo, "Artículo no encontrado")
                 nombres_articulos.append(nombre_articulo)
                 articulos_info.append(cod_articulo)
@@ -142,16 +167,13 @@ def historial_solicitudes(request):
                 nombres_articulos.append(None)
                 articulos_info.append(None)
 
-            # Agregar la cantidad si existe
             if cantidad:
                 cantidades_info.append(cantidad)
             else:
                 cantidades_info.append(None)
 
-        # Ahora combinamos los tres valores (código, nombre, cantidad) usando zip
         articulos_combinados = zip_longest(articulos_info, nombres_articulos, cantidades_info, fillvalue=None)
 
-        # Añadimos los artículos combinados a la solicitud
         solicitudes_con_nombre.append({
             'solicitud': solicitud,
             'articulos_combinados': articulos_combinados,
@@ -161,9 +183,13 @@ def historial_solicitudes(request):
     context = {
         'solicitudes_con_nombre': solicitudes_con_nombre,
         'estado_devolucion': estado_devolucion,
+        'atrasado': atrasado,  # Añadimos el filtro "atrasado"
     }
 
     return render(request, 'solicitudes/historial_solicitudes.html', context)
+
+
+
 
 @login_required(login_url='sesion_cerrada')
 def actualizar_estado_devolucion(request, solicitud_id):
@@ -173,32 +199,28 @@ def actualizar_estado_devolucion(request, solicitud_id):
         nuevo_estado = request.POST.get('estado_devolucion')
 
         if nuevo_estado:
-            # Verificar si el estado cambia a 'devuelto' y no estaba ya devuelto
-            if nuevo_estado == 'devuelto' and solicitud.estado_devolucion != 'devuelto':
-                errores = []
+            # Si el estado es devuelto o parcialmente devuelto, actualizar el campo 'atrasado' a False
+            if nuevo_estado in ['devuelto', 'parcialmente devuelto']:
+                solicitud.atrasado = False  # El artículo ya fue devuelto, no está atrasado
 
-                # Procesar todos los artículos asociados a la solicitud
-                for i in range(1, 21):
-                    cod_articulo = getattr(solicitud, f'cod_articulo{i}', None)
-                    cantidad = getattr(solicitud, f'cantidad{i}', None)
-
-                    if cod_articulo and cantidad:  # Validar que el artículo y la cantidad existen
-                        try:
-                            articulo = Articulo.objects.get(cod_articulo=cod_articulo)
-                            articulo.cantidad += cantidad
-                            articulo.save()
-                        except Articulo.DoesNotExist:
-                            errores.append(f"El artículo con código {cod_articulo} no existe.")
-
-                if errores:
-                    # Si hubo errores, mostrarlos y no cambiar el estado de devolución
-                    for error in errores:
-                        messages.error(request, error)
-                    return redirect('historial_solicitudes')
-
-            # Actualizar el estado de devolución de la solicitud
+            # Actualizamos el estado de devolución
             solicitud.estado_devolucion = nuevo_estado
-            solicitud.save()
+            solicitud.save()  # Guardamos la solicitud con el nuevo estado
+
+            # Actualizamos la cantidad de los artículos
+            for i in range(1, 21):
+                cod_articulo = getattr(solicitud, f'cod_articulo{i}', None)
+                cantidad = getattr(solicitud, f'cantidad{i}', None)
+
+                if cod_articulo and cantidad:  # Validar que el artículo y la cantidad existen
+                    try:
+                        articulo = Articulo.objects.get(cod_articulo=cod_articulo)
+                        articulo.cantidad += cantidad
+                        articulo.save()
+                    except Articulo.DoesNotExist:
+                        messages.error(request, f"El artículo con código {cod_articulo} no existe.")
+                        return redirect('historial_solicitudes')
+
             messages.success(request, 'Estado de devolución actualizado exitosamente.')
         else:
             messages.error(request, 'Error al actualizar el estado de devolución.')

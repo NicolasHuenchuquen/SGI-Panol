@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django import forms
 import re
+from datetime import datetime
 
 class SolicitudArticulo(models.Model):
     TIPO_SOLICITANTE_CHOICES = [
@@ -22,6 +23,7 @@ class SolicitudArticulo(models.Model):
     hora_salida = models.TimeField()   
     fecha_devolucion = models.DateField()  
     hora_devolucion = models.TimeField()
+    
 
     cod_articulo1 = models.CharField(max_length=50)
     cantidad1 = models.PositiveIntegerField()
@@ -86,6 +88,7 @@ class SolicitudArticulo(models.Model):
 
     tipo_solicitante = models.CharField(max_length=10, choices=TIPO_SOLICITANTE_CHOICES, default='otro',)
     estado_devolucion = models.CharField(max_length=50, choices=ESTADO_DEVOLUCION_CHOICES, default='no devuelto',)
+    atrasado = models.BooleanField(default=False)#PARA VER LOS ARTICULOS ATRASADOS
 
     def save(self, *args, **kwargs):
             # Transformar todos los campos cod_articulo1 a cod_articulo20 a mayúsculas antes de guardar
