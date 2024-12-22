@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
-
+from django.contrib.auth.models import User
 
 def sesion_cerrada(request):
     # Mostrar mensaje de que la sesión expiró o la sesión fue cerrada
@@ -19,12 +19,17 @@ def registrar_panolero(request):
     if request.method == "POST":
         form = PanoleroCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, "Pañolero agregado exitosamente.", extra_tags='usuario_nuevo')
-            return redirect('registrar_panolero')  # Redirige a la página deseada después de guardar
+            email = form.cleaned_data.get('email')
+            # Verificar si el correo ya existe
+            if User.objects.filter(email=email).exists():
+                messages.error(request, "Por favor corrige los errores en el formulario.", extra_tags='aviso_form')
+            else:
+                form.save()
+                messages.success(request, "Pañolero agregado exitosamente.", extra_tags='usuario_nuevo')
+                return redirect('registrar_panolero')  # Redirige a la página deseada después de guardar
         else:
             # Si hay errores, se muestran todos al renderizar de nuevo el formulario
-            messages.error(request, "Por favor corrige los errores en el formulario.",extra_tags='aviso_form')
+            messages.error(request, "Por favor corrige los errores en el formulario.", extra_tags='aviso_form')
     else:
         form = PanoleroCreationForm()
     

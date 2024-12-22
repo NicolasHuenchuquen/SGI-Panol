@@ -51,7 +51,7 @@ def agregar_insumo(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'El Insumo ha sido ingresado correctamente.', extra_tags='agregar_insumo')
-            return redirect('agregar_insumo')  # Redirige a la misma página para que el mensaje se muestre
+            return redirect('agregar_insumo') 
     data = {'form': form}
     return render(request, 'inventario/agregar_insumo.html', data)
 
@@ -70,8 +70,6 @@ def agregar_activo(request):
             form.save()
             messages.success(request, 'El Activo ha sido ingresado correctamente.', extra_tags='agregar_activo')
             return redirect('agregar_activo')
-        else:
-            print("Formulario no válido", form.errors)  # Mostrará los errores del formulario
     return render(request, 'inventario/agregar_activo.html', {'form': form})
 
 @login_required(login_url='sesion_cerrada')

@@ -151,13 +151,14 @@
                         {% endif %}
                     </div>
                 </div>
+                <br>
                 <div class="row">
                     <div class="col d-flex justify-content-center">
-                        <button type="submit" class="btn btn-agregar">Enviar Solicitud</button>
+                        <button type="button" class="btn agregar2" id="agregar-articulo">Agregar otro artículo</button>
                     </div>
 
                     <div class="col d-flex justify-content-center">
-                        <button type="button" class="btn agregar2" id="agregar-articulo">Agregar otro artículo</button>
+                        <button type="submit" class="btn btn-agregar">Enviar Solicitud</button>
                     </div>
                 </div>
             </form>
@@ -184,56 +185,83 @@
         });
 
         document.addEventListener('DOMContentLoaded', function () {
-        const articulosContainer = document.getElementById('articulos-container');
-        const botonAgregarArticulo = document.getElementById('agregar-articulo');
-        let articuloIndex = 1; // Contador de artículos
+            const articulosContainer = document.getElementById('articulos-container');
+            const botonAgregarArticulo = document.getElementById('agregar-articulo');
+            let articuloIndex = 1; // Contador de artículos
 
-        botonAgregarArticulo.addEventListener('click', function () {
-            if (articuloIndex >= 20) { // Verificar el límite máximo de 19
-                alert('No puedes agregar más de 20 artículos.');
-                return;
+            // Restaurar artículos desde localStorage
+            const articulosGuardados = JSON.parse(localStorage.getItem('articulos')) || [];
+            if (articulosGuardados.length > 0) {
+                articulosGuardados.forEach((articulo, index) => {
+                    agregarArticulo(index + 1, articulo.codigo, articulo.cantidad);
+                });
+                articuloIndex = articulosGuardados.length;
             }
 
-            articuloIndex++; // Incrementar el índice de artículo
-
-            const nuevoArticulo = document.createElement('div');
-            nuevoArticulo.classList.add('articulo-item', 'mb-3');
-            nuevoArticulo.id = `articulo-${articuloIndex}`;
-
-            nuevoArticulo.innerHTML = `
-                <div class="row">
-                    <div class="col-md-5 mb-3">
-                        <label for="cod_articulo${articuloIndex}" class="form-label titulo-input">Código del Artículo</label>
-                        <input type="text" name="cod_articulo${articuloIndex}" id="cod_articulo${articuloIndex}" class="form-control" placeholder="Ejemplo: CFTN1234">
-                    </div>
-
-                    <div class="col-md-5 mb-3">
-                        <label for="cantidad${articuloIndex}" class="form-label titulo-input">Cantidad</label>
-                        <input type="number" name="cantidad${articuloIndex}" id="cantidad${articuloIndex}" class="form-control" placeholder="Ejemplo: 2">
-                    </div>
-
-                    <div class="col-md-2">
-                        <label for="cantidad${articuloIndex}" class="form-label titulo-input">Borrar</label>
-                        <a type="button" class="btn btn-danger btn-borrar justify-content-center d-flex mt-1" data-id="articulo-${articuloIndex}">
-                            <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
-                        </a>
-                    </div>
-                </div>
-            `;
-
-            articulosContainer.appendChild(nuevoArticulo);
-
-            // Agregar evento al botón de borrar
-            nuevoArticulo.querySelector('.btn-borrar').addEventListener('click', function () {
-                const id = this.getAttribute('data-id');
-                const articuloABorrar = document.getElementById(id);
-                articulosContainer.removeChild(articuloABorrar);
-
-                // Reducir el índice al eliminar un artículo
-                articuloIndex--;
+            botonAgregarArticulo.addEventListener('click', function () {
+                if (articuloIndex >= 20) { // Límite de 20
+                    alert('No puedes agregar más de 20 artículos.');
+                    return;
+                }
+                articuloIndex++;
+                agregarArticulo(articuloIndex, '', '');
             });
+
+            articulosContainer.addEventListener('input', function () {
+                guardarArticulos();
+            });
+
+            function agregarArticulo(index, codigo, cantidad) {
+                const nuevoArticulo = document.createElement('div');
+                nuevoArticulo.classList.add('articulo-item', 'mb-3');
+                nuevoArticulo.id = `articulo-${index}`;
+
+                nuevoArticulo.innerHTML = `
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label for="cod_articulo${index}" class="form-label titulo-input">Código del Artículo</label>
+                            <input type="text" name="cod_articulo${index}" id="cod_articulo${index}" class="form-control" placeholder="Ejemplo: CFTN1234" value="${codigo}">
+                        </div>
+
+                        <div class="col-md-5 mb-3">
+                            <label for="cantidad${index}" class="form-label titulo-input">Cantidad</label>
+                            <input type="number" name="cantidad${index}" id="cantidad${index}" class="form-control" placeholder="Ejemplo: 2" value="${cantidad}">
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="form-label titulo-input">Borrar</label>
+                            <a type="button" class="btn btn-danger btn-borrar justify-content-center d-flex mt-1" data-id="articulo-${index}">
+                                <i class="fa-solid fa-trash" style="color: #ffffff;"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+                articulosContainer.appendChild(nuevoArticulo);
+
+                nuevoArticulo.querySelector('.btn-borrar').addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    const articuloABorrar = document.getElementById(id);
+                    articulosContainer.removeChild(articuloABorrar);
+                    guardarArticulos();
+                });
+
+                guardarArticulos();
+            }
+
+            function guardarArticulos() {
+                const articulos = [];
+                const items = articulosContainer.querySelectorAll('.articulo-item');
+                items.forEach((item) => {
+                    const codigo = item.querySelector('input[name^="cod_articulo"]').value;
+                    const cantidad = item.querySelector('input[name^="cantidad"]').value;
+                    if (codigo || cantidad) {
+                        articulos.push({ codigo, cantidad });
+                    }
+                });
+                localStorage.setItem('articulos', JSON.stringify(articulos));
+            }
         });
-    });
     </script>
 
     <!-- BOOTSTRAP JS -->

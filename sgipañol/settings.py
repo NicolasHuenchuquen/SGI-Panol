@@ -30,6 +30,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTHENTICATION_BACKENDS = [
+    'backends.EmailBackend',  # El backend personalizado que permite iniciar sesión con email
+    'django.contrib.auth.backends.ModelBackend',  # El backend predeterminado de Django
+]
+
+AUTHENTICATION_METHOD = 'email'
 
 # Application definition
 

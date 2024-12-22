@@ -27,11 +27,11 @@ def crear_solicitud(request):
                 cod_articulo_field = f'cod_articulo{i}'
                 cantidad_field = f'cantidad{i}'
 
+                # Obtener los valores de los campos dinámicos
                 cod_articulo = form.cleaned_data.get(cod_articulo_field)
-                cantidad = form.cleaned_data.get(cantidad_field)
+                cantidad = form.cleaned_data.get(cantidad_field, 0)
 
-                if cod_articulo and cantidad:
-                    # Convertir el código de artículo a mayúsculas antes de usarlo y almacenarlo
+                if cod_articulo:  # Solo procesar si hay un valor válido
                     cod_articulo = cod_articulo.strip().upper()
 
                     # Almacenar el código de artículo transformado
@@ -149,22 +149,42 @@ def historial_solicitudes(request):
         )
     }
 
+    # Asegurarnos de que todas las solicitudes tengan un encargado asignado
+    if request.user.is_authenticated:
+        for solicitud in solicitudes:
+            if not solicitud.encargado:  # Si no tiene encargado
+                solicitud.encargado = f"{request.user.first_name} {request.user.last_name}".strip()
+                solicitud.save()
+
+    # Hacer una consulta para obtener todos los artículos necesarios
+    articulos_dict = {
+    articulo.cod_articulo: {'nombre': articulo.nombre, 'tipo': articulo.tipo_articulo}
+    for articulo in Articulo.objects.filter(
+        cod_articulo__in=[getattr(solicitud, f'cod_articulo{i}', None) for solicitud in solicitudes for i in range(1, 21) if getattr(solicitud, f'cod_articulo{i}', None)]
+    )
+    }
+
     solicitudes_con_nombre = []
 
     for solicitud in solicitudes:
         articulos_info = []
         nombres_articulos = []
+        tipos_articulos = []
         cantidades_info = []
 
         for i in range(1, 21):
             cod_articulo = getattr(solicitud, f'cod_articulo{i}', None)
             cantidad = getattr(solicitud, f'cantidad{i}', None)
             if cod_articulo:
-                nombre_articulo = articulos_dict.get(cod_articulo, "Artículo no encontrado")
+                articulo_data = articulos_dict.get(cod_articulo, {"nombre": "Artículo no encontrado", "tipo": "Desconocido"})
+                nombre_articulo = articulo_data["nombre"]
+                tipo_articulo = articulo_data["tipo"]
                 nombres_articulos.append(nombre_articulo)
+                tipos_articulos.append(tipo_articulo)
                 articulos_info.append(cod_articulo)
             else:
                 nombres_articulos.append(None)
+                tipos_articulos.append(None)
                 articulos_info.append(None)
 
             if cantidad:
@@ -172,7 +192,7 @@ def historial_solicitudes(request):
             else:
                 cantidades_info.append(None)
 
-        articulos_combinados = zip_longest(articulos_info, nombres_articulos, cantidades_info, fillvalue=None)
+        articulos_combinados = zip_longest(articulos_info, nombres_articulos, tipos_articulos, cantidades_info, fillvalue=None)
 
         solicitudes_con_nombre.append({
             'solicitud': solicitud,
@@ -187,9 +207,6 @@ def historial_solicitudes(request):
     }
 
     return render(request, 'solicitudes/historial_solicitudes.html', context)
-
-
-
 
 @login_required(login_url='sesion_cerrada')
 def actualizar_estado_devolucion(request, solicitud_id):

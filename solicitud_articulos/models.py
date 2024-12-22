@@ -89,8 +89,16 @@ class SolicitudArticulo(models.Model):
     tipo_solicitante = models.CharField(max_length=10, choices=TIPO_SOLICITANTE_CHOICES, default='otro',)
     estado_devolucion = models.CharField(max_length=50, choices=ESTADO_DEVOLUCION_CHOICES, default='no devuelto',)
     atrasado = models.BooleanField(default=False)#PARA VER LOS ARTICULOS ATRASADOS
+    encargado = models.CharField(max_length=255, blank=True)  # Campo para almacenar el nombre y apellido del encargado
 
     def save(self, *args, **kwargs):
+            # Obtener el usuario de los argumentos adicionales
+            user = kwargs.pop('user', None)
+
+            # Si el usuario existe, guardar su nombre y apellido
+            if user:
+                self.encargado = f"{user.first_name} {user.last_name}".strip()
+
             # Transformar todos los campos cod_articulo1 a cod_articulo20 a mayúsculas antes de guardar
             for i in range(1, 21):
                 cod_articulo_field = f'cod_articulo{i}'
@@ -100,6 +108,7 @@ class SolicitudArticulo(models.Model):
 
             # Llamar al método `save` del modelo para guardar la instancia
             super(SolicitudArticulo, self).save(*args, **kwargs)
+    
 
     def __str__(self):
         return f"{self.nombre_apellido} - RUT: {self.rut} - Asignatura: {self.asignatura}"

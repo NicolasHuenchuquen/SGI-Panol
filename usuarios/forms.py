@@ -56,6 +56,16 @@ class PanoleroCreationForm(forms.ModelForm):
             raise ValidationError("Este RUT ya está registrado.")
 
         return rut
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        
+        # Verificar si el correo ya existe en la base de datos
+        if User.objects.filter(email=email).exists():
+            raise ValidationError("Este correo ya está registrado.")  # Aquí se muestra el mensaje de error
+        
+        return email
+
 
     def validar_digito_verificador(self, rut):
         """

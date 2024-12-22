@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 #PARA MANEJAR EL ERROR DE CSRF TOKEN
 from django.shortcuts import render
+from django.contrib.auth.models import User
 
 
 
@@ -41,28 +42,31 @@ def iniciar_sesion(request):
     - redirect: Si la autenticación es exitosa, redirige al usuario a la URL indicada.
     """
     if request.method == 'POST':
-        # Obtiene el nombre de usuario y la contraseña desde el formulario de inicio de sesión
-        username = request.POST.get('username')
+        # Obtiene las credenciales desde el formulario de inicio de sesión
+        username_or_email = request.POST.get('username')  # Ahora puede ser nombre de usuario o correo
         password = request.POST.get('password')
 
         # Verifica si ambos campos han sido llenados
-        if not username or not password:
-            # Si faltan datos, muestra un mensaje de error
-            messages.error(request, 'Por favor ingrese tanto el nombre de usuario como la contraseña.', extra_tags='login_error')
+        if not username_or_email or not password:
+            messages.error(request, 'Por favor ingrese tanto el nombre de usuario/correo como la contraseña.', extra_tags='login_error')
         else:
-            # Autentica al usuario con las credenciales proporcionadas
+            # Si se proporciona un correo, busca el nombre de usuario correspondiente
+            try:
+                user = User.objects.get(email=username_or_email)
+                username = user.username
+            except User.DoesNotExist:
+                username = username_or_email  # Usa lo ingresado como nombre de usuario si no es correo
+
+            # Autentica al usuario con el nombre de usuario obtenido y la contraseña
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 # Si la autenticación es exitosa, inicia sesión y redirige
                 login(request, user)
-                # Obtiene la URL a la que se debe redirigir (si existe en la petición GET, sino redirige a 'formulario_solicitudes')
-                next_url = request.GET.get('next', 'formulario_solicitudes')
+                next_url = request.GET.get('next', 'formulario_solicitudes')  # Redirige según la URL solicitada
                 return redirect(next_url)
             else:
-                # Si las credenciales no son válidas, muestra un mensaje de error
-                messages.error(request, 'Nombre de usuario o contraseña no válidos', extra_tags='login_error')
+                messages.error(request, 'Nombre de usuario, correo o contraseña no válidos.', extra_tags='login_error')
 
-    # Renderiza el formulario de inicio de sesión
     return render(request, 'navegacion/iniciar_sesion.html')
 
 @login_required(login_url='sesion_cerrada')

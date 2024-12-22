@@ -114,7 +114,7 @@
                                     </tr>
                                     <tr>
                                         <td class="texto-blanco"><strong>Encargado</strong></td>
-                                        <td class="texto-blanco align-items-center">{{ user.first_name }} {{user.last_name}}</td>
+                                        <td class="texto-blanco align-items-center">{{ item.solicitud.encargado }}</td>
                                     </tr>
                                     <tr>
                                         <td class="texto-blanco"><strong>Estado</strong></td>
@@ -154,16 +154,18 @@
                                                 <thead>
                                                     <tr class="texto-blanco">
                                                         <th class="texto-blanco">Nombre</th>
+                                                        <th class="texto-blanco">Tipo</th>
                                                         <th class="texto-blanco">Código</th>
                                                         <th class="texto-blanco">Cantidad</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     {% if item.articulos_combinados %}
-                                                        {% for cod_articulo, nombre_articulo, cantidad in item.articulos_combinados %}
+                                                        {% for cod_articulo, nombre_articulo, tipo_articulo, cantidad in item.articulos_combinados %}
                                                             <tr class="texto-blanco">
                                                                 {% if not cod_articulo == null %}
                                                                     <td class="texto-blanco">{{ nombre_articulo }}</td>
+                                                                    <td class="texto-blanco">{{ tipo_articulo }}</td>
                                                                     <td class="texto-blanco">{{ cod_articulo }}</td>
                                                                     <td class="texto-blanco">{{ cantidad }}</td>
                                                                 {% endif %}
@@ -171,7 +173,7 @@
                                                         {% endfor %}
                                                     {% else %}
                                                         <tr>
-                                                            <td colspan="3">No hay artículos disponibles.</td>
+                                                            <td colspan="4">No hay artículos disponibles.</td>
                                                         </tr>
                                                     {% endif %}
                                                 </tbody>
